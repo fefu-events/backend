@@ -9,7 +9,10 @@ from backend.routers.dependencies import (
     user_exist, get_user_info_from_schema
 )
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/user",
+    tags=["user"]
+)
 
 
 @router.get(
