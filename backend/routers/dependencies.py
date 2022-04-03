@@ -18,12 +18,17 @@ def get_user_info_from_schema(user: UserAzure):
     return UserBase(**user_process)
 
 
-def user_exist(request: Request,
-               user_azure: UserAzure = Depends(azure_scheme)):
-    user_azure_parsed = get_user_info_from_schema(user_azure)
+def get_user_azure(user_azure: UserAzure = Depends(azure_scheme)):
+    return get_user_info_from_schema(user_azure)
+
+
+def user_exist(
+    request: Request,
+    user_azure: UserAzure = Depends(get_user_azure),
+):
     with Session(engine) as session:
         user: User | None = session.exec(
-            select(User).where(User.email == user_azure_parsed.email)
+            select(User).where(User.email == user_azure.email)
         ).first()
         if not user:
             raise HTTPException(
