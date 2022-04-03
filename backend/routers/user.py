@@ -16,6 +16,23 @@ router = APIRouter(
 
 
 @router.get(
+    '',
+    name="user:get",
+    description="Get user by id",
+    response_model=User | HTTPException
+)
+def get_user(user_id: int):
+    with Session(engine) as session:
+        user = session.get(User, user_id)
+        if not user:
+            raise HTTPException(
+                status_code=404,
+                detail="user not found"
+            )
+        return user
+
+
+@router.get(
     "/me",
     name="user:getme",
     description="Get current profile information",
