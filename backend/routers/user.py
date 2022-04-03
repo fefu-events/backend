@@ -20,7 +20,7 @@ router = APIRouter(
     '',
     name="user:get",
     description="Get user by id",
-    response_model=User | HTTPException
+    response_model=User
 )
 def get_user(user_id: int):
     with Session(engine) as session:
