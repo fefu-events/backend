@@ -7,6 +7,7 @@ from sqlmodel import Session, select
 from backend.database import engine
 from backend.models.user import User
 from backend.routers.authentication import azure_scheme
+from backend.resources import strings
 
 
 def get_user_info_from_schema(user: UserAzure):
@@ -27,6 +28,6 @@ def user_exist(request: Request,
         if not user:
             raise HTTPException(
                 status_code=400,
-                detail="The user is not exist"
+                detail=strings.USER_DOES_NOT_EXIST_ERROR
             )
         request.state.current_user = user

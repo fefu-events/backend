@@ -8,6 +8,7 @@ from backend.routers.authentication import azure_scheme
 from backend.routers.dependencies import (
     user_exist, get_user_info_from_schema
 )
+from backend.resources import strings
 
 router = APIRouter(
     prefix="/user",
@@ -27,7 +28,7 @@ def get_user(user_id: int):
         if not user:
             raise HTTPException(
                 status_code=404,
-                detail="user not found"
+                detail=strings.USER_DOES_NOT_FOUND_ERROR
             )
         return user
 
@@ -58,7 +59,7 @@ async def register(user_azure: UserAzure = Depends(azure_scheme),
         if users:
             raise HTTPException(
                 status_code=400,
-                detail="The user with this email already exists"
+                detail=strings.USER_WITH_THIS_EMAIL_ALREADY_EXIST_ERROR
             )
         else:
             user = User(
