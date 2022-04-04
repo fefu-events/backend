@@ -1,3 +1,4 @@
+from typing import Generator
 from fastapi import Request, Depends, HTTPException
 
 from fastapi_azure_auth.user import User as UserAzure
@@ -5,7 +6,15 @@ from fastapi_azure_auth.user import User as UserAzure
 from backend.models.user import User
 from backend.routers.authentication import azure_scheme
 from backend.resources import strings
+from backend.database.session import SessionLocal
 
+
+def get_db() -> Generator:
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()
 
 # def get_user_info_from_schema(user: UserAzure):
 #     user_process = {
