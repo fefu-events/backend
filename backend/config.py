@@ -4,7 +4,9 @@ from pydantic import BaseSettings, Field, AnyHttpUrl
 class Settings(BaseSettings):
     DATABASE_URL: str = Field(default='', env='DATABASE_URL')
     SECRET_KEY: str = Field('my super secret key', env='SECRET_KEY')
-    BACKEND_CORS_ORIGINS: list[str | AnyHttpUrl] = ['http://localhost:8000']
+    BACKEND_CORS_ORIGINS: list[str | AnyHttpUrl] = [
+        'http://localhost:8000', 'http://localhost:8080'
+    ]
 
     # Azure ad
     OPENAPI_CLIENT_ID: str = Field(default='', env='OPENAPI_CLIENT_ID')
