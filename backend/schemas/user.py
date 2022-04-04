@@ -13,3 +13,10 @@ class UserCreate(BaseModel):
 class UserUpdate(BaseModel):
     pass
 
+
+class UserInDBBase(UserBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
