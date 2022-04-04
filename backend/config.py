@@ -5,7 +5,8 @@ class Settings(BaseSettings):
     DATABASE_URL: str = Field(default='', env='DATABASE_URL')
     SECRET_KEY: str = Field('my super secret key', env='SECRET_KEY')
     BACKEND_CORS_ORIGINS: list[str | AnyHttpUrl] = [
-        'http://localhost:8000', 'http://localhost:8080'
+        'http://localhost:8000', 'http://localhost:8080',
+        'http://192.168.0.12:8080', "https://192.168.0.12:8080"
     ]
 
     # Azure ad
