@@ -1,15 +1,14 @@
 from typing import Generator
-from fastapi import Request, Depends, HTTPException
 
+from fastapi import Depends, HTTPException, Request
+from fastapi_azure_auth.user import User as UserAzure
 from sqlalchemy.orm import Session
 
-from fastapi_azure_auth.user import User as UserAzure
-
-from backend.schemas.user import UserBase
-from backend.routers.authentication import azure_scheme
-from backend.resources import strings
-from backend.database.session import SessionLocal
 from backend import crud
+from backend.database.session import SessionLocal
+from backend.resources import strings
+from backend.routers.authentication import azure_scheme
+from backend.schemas.user import UserBase
 
 
 def get_db() -> Generator:

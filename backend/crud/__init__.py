@@ -1,1 +1,1 @@
-from backend.crud.user import user # noqa
+from backend.crud.user import user  # noqa
