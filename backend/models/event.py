@@ -16,5 +16,5 @@ class Event(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship("User", back_populates="events")
     place_description = Column(
-        String(100), unique=True, index=True, nullable=False)
+        String(100), unique=True, index=False, nullable=False)
     tags = Column(ARRAY(String(15)), server_default='{}')
