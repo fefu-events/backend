@@ -11,6 +11,8 @@ class UserAzure(BaseModel):
 class UserBase(BaseModel):
     name: str
     email: str
+    is_admin: bool
+    is_moderator: bool
     tags: List[str]
 
 
