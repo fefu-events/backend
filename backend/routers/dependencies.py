@@ -1,14 +1,14 @@
 from typing import Generator
 
 from fastapi import Depends, HTTPException, Request
-from fastapi_azure_auth.user import User as UserAzure
+from fastapi_azure_auth.user import User as UserAzureLib
 from sqlalchemy.orm import Session
 
 from backend import crud
 from backend.database.session import SessionLocal
 from backend.resources import strings
 from backend.routers.authentication import azure_scheme
-from backend.schemas.user import UserBase
+from backend.schemas.user import UserAzure
 
 
 def get_db() -> Generator:
@@ -20,9 +20,9 @@ def get_db() -> Generator:
 
 
 def get_user_azure(
-    user_azure: UserAzure = Depends(azure_scheme)
-) -> UserBase:
-    return UserBase(
+    user_azure: UserAzureLib = Depends(azure_scheme)
+) -> UserAzure:
+    return UserAzure(
         email=user_azure.claims["preferred_username"],
         name=user_azure.claims["name"],
     )

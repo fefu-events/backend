@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from backend import crud
 from backend.resources import strings
 from backend.routers.dependencies import get_db, get_user_azure, user_exist
-from backend.schemas.user import UserBase, UserInDBBase
+from backend.schemas.user import UserAzure, UserInDBBase
 
 router = APIRouter(
     prefix="/user",
@@ -54,10 +54,10 @@ def get_me(
 @router.post(
     "/register",
     name="user:register",
-    response_model=UserBase,
+    response_model=UserAzure,
 )
 async def register(
-    user_azure: UserBase = Depends(get_user_azure),
+    user_azure: UserAzure = Depends(get_user_azure),
     db=Depends(get_db),
 ):
     user = crud.user.get_by_email(db, user_azure.email)
