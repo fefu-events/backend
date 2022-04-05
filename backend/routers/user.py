@@ -51,7 +51,7 @@ def get_me(
     return request.state.current_user
 
 
-@router.get(
+@router.post(
     "/register",
     name="user:register",
     response_model=UserBase,
