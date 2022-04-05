@@ -1,9 +1,17 @@
+from typing import List
+
 from pydantic import BaseModel, EmailStr
+
+
+class UserAzure(BaseModel):
+    name: str
+    email: str
 
 
 class UserBase(BaseModel):
     name: str
     email: str
+    tags: List[str]
 
 
 class UserCreate(BaseModel):
@@ -19,4 +27,3 @@ class UserInDBBase(UserBase):
 
     class Config:
         orm_mode = True
-
