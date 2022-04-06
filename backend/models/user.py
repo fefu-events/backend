@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class User(Base):
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), index=True)
+    name = Column(String(100))
     email = Column(String(100), unique=True, index=True, nullable=False)
     tags = Column(ARRAY(String(15)), server_default='{}')
     is_admin = Column(Boolean, default=False, nullable=False)
