@@ -7,6 +7,9 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /code/
 
+# Set time zone
+RUN cp /usr/share/zoneinfo/Asia/Vladivostok /etc/localtime
+
 # Install dependencies
 COPY . /code/
 
