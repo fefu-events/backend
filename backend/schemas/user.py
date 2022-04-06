@@ -21,7 +21,7 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    pass
+    tags: List[str]
 
 
 class UserInDBBase(UserBase):
