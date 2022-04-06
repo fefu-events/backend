@@ -72,7 +72,7 @@ def update_me(
 @router.post(
     "/register",
     name="user:register",
-    response_model=UserAzure,
+    response_model=UserInDBBase,
 )
 async def register(
     user_azure: UserAzure = Depends(get_user_azure),
@@ -84,5 +84,4 @@ async def register(
             status_code=400,
             detail=strings.USER_WITH_THIS_EMAIL_ALREADY_EXIST_ERROR
         )
-    crud.user.create(db, obj_in=user_azure)
-    return user_azure
+    return crud.user.create(db, obj_in=user_azure)
