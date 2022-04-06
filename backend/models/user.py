@@ -5,8 +5,8 @@ from sqlalchemy.orm import relationship
 
 from backend.database.base_class import Base
 
-# if TYPE_CHECKING:
-    #from .item import Item  # noqa: F401
+if TYPE_CHECKING:
+    from .event import Event  # noqa: F401
 
 
 class User(Base):
