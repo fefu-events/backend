@@ -18,18 +18,15 @@ class EventCreate(EventBase):
 
     @root_validator(pre=True)
     def date_end_must_be_larger_than_date_begin(cls, v):
-        date_begin = v.get('date_begin')
-        date_end = v.get('date_end')
-        if type(date_begin) == str and type(date_end) == str:
-            date_begin_parsed = parser.parse(v.get('date_begin'))
-            date_end_parsed = parser.parse(v.get('date_end'))
-            now = datetime.now(tz=timezone.utc)
-            if date_begin_parsed < now:
-                raise ValueError(
-                    "date_begin must be larger than now")
-            if date_begin_parsed > date_end_parsed:
-                raise ValueError(
-                    "date_end must be larger than date_begin")
+        date_begin_parsed = parser.parse(v.get('date_begin'))
+        date_end_parsed = parser.parse(v.get('date_end'))
+        now = datetime.now(tz=timezone.utc)
+        if date_begin_parsed < now:
+            raise ValueError(
+                "date_begin must be larger than now")
+        if date_begin_parsed > date_end_parsed:
+            raise ValueError(
+                "date_end must be larger than date_begin")
         return v
 
 
