@@ -6,6 +6,7 @@ from backend.routers.authentication import azure_scheme
 from backend.config import settings
 
 from backend.routers.user import router as user_router
+from backend.routers.event import router as event_router
 
 app = FastAPI(
     swagger_ui_oauth2_redirect_url='/oauth2-redirect',
@@ -36,3 +37,4 @@ async def load_config() -> None:
     await azure_scheme.openid_config.load_config()
 
 app.include_router(user_router)
+app.include_router(event_router)
