@@ -15,7 +15,7 @@ router = APIRouter(
 
 @router.get(
     '/',
-    name="user:get_all",
+    name="user:get",
     response_model=List[UserInDBBase],
 )
 def get_users(
@@ -28,8 +28,7 @@ def get_users(
 
 @router.get(
     '/{user_id}',
-    name="user:get",
-    description="Get user by id",
+    name="user:get_by_id",
     response_model=UserInDBBase,
 )
 def get_user(

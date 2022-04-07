@@ -15,7 +15,7 @@ router = APIRouter(
 
 @router.get(
     "/",
-    name="me:events",
+    name="personal_events:get",
     dependencies=[Depends(user_exist)],
     response_model=List[EventInDBBase],
 )

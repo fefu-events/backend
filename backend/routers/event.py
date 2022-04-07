@@ -18,6 +18,7 @@ router = APIRouter(
 
 @router.post(
     "/",
+    name="event:create",
     response_model=EventInDBBase,
     dependencies=[Depends(user_exist)],
 )
@@ -32,6 +33,7 @@ def create_event(
 
 @router.put(
     "/{event_id}",
+    name="event:update",
     response_model=EventInDBBase,
     dependencies=[Depends(user_exist)],
 )
@@ -57,6 +59,7 @@ def update_event(
 
 @router.delete(
     "/{event_id}",
+    name="event:delete",
     response_model=EventInDBBase,
     dependencies=[Depends(user_exist)],
 )
@@ -83,6 +86,7 @@ def delete_event(
 
 @router.get(
     "/{event_id}",
+    name="event:get_by_id",
     response_model=EventInDBBase,
 )
 def get_event(
@@ -100,6 +104,7 @@ def get_event(
 
 @router.get(
     "/",
+    name="event:get",
     response_model=List[EventInDBBase],
     dependencies=[Depends(user_exist)],
 )
