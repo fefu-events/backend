@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Query
 
 from backend import crud
 from backend.routers.dependencies import get_db, user_exist
-from backend.schemas.event import EventCreate, EventUpdate, EventInDBBase, EventFilter
+from backend.schemas.event import EventCreate, EventUpdate, EventInDBBase
 
 
 router = APIRouter(
