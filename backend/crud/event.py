@@ -20,8 +20,9 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return db_obj
 
     def get_multi_with_filter(
-        self, db, skip, limit, title, date_begin: datetime,
-        date_end: datetime, user_id, tags: List[str]
+        self, db, skip, limit, title=None,
+        date_begin: datetime = None, date_end: datetime = None,
+        user_id=None, tags: List[str] = None
     ) -> List[Event]:
         query = db.query(self.model)
 
