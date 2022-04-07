@@ -1,10 +1,11 @@
 from typing import List
+from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Query
 
 from backend import crud
 from backend.routers.dependencies import get_db, user_exist
-from backend.schemas.event import EventCreate, EventUpdate, EventInDBBase
+from backend.schemas.event import EventCreate, EventUpdate, EventInDBBase, EventFilter
 
 
 router = APIRouter(
@@ -102,7 +103,15 @@ def get_event(
 def get_events(
     skip: int = 0,
     limit: int = 100,
-    db=Depends(get_db)
+    title: str = None,
+    date_begin: datetime = None,
+    date_end: datetime = None,
+    tags: List[str] = Query(None),
+    user_id: int = None,
+    db=Depends(get_db),
 ):
-    events = crud.event.get_multi(db, skip=skip, limit=limit)
+    events = crud.event.get_multi_with_filter(
+        db, skip=skip, limit=limit, title=title,
+        date_begin=date_begin, date_end=date_end, user_id=user_id,
+        tags=tags)
     return events
