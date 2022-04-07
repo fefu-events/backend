@@ -2,10 +2,12 @@ from typing import List
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Query
+from fastapi.responses import RedirectResponse
 
 from backend import crud
 from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.event import EventCreate, EventUpdate, EventInDBBase
+from backend.utils import encode_query_params
 
 
 router = APIRouter(
@@ -99,6 +101,7 @@ def get_event(
 @router.get(
     "/",
     response_model=List[EventInDBBase],
+    dependencies=[Depends(user_exist)],
 )
 def get_events(
     skip: int = 0,
@@ -108,8 +111,23 @@ def get_events(
     date_end: datetime = None,
     tags: List[str] = Query(None),
     user_id: int = None,
+    personalize_tags: bool = None,
     db=Depends(get_db),
 ):
+    if personalize_tags:
+        query_params = encode_query_params({
+            "skip": skip,
+            "limit": limit,
+            "title": title,
+            "date_begin": date_begin,
+            "date_end": date_end,
+            "tags": tags,
+            "user_id": user_id
+        })
+        return RedirectResponse(
+            f"/personal-events{query_params}",
+            status_code=303,
+        )
     events = crud.event.get_multi_with_filter(
         db, skip=skip, limit=limit, title=title,
         date_begin=date_begin, date_end=date_end, user_id=user_id,
