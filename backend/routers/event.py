@@ -30,6 +30,11 @@ def create_event(
         raise HTTPException(
             status_code=404
         )
+    category = crud.category.get(db, id=event_in.category_id)
+    if not category:
+        raise HTTPException(
+            status_code=404
+        )
     return crud.event.create_with_user(
         db, obj_in=event_in, user_id=request.state.current_user.id)
 
