@@ -1,13 +1,12 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import RedirectResponse
 
 from backend import crud
 from backend.routers.dependencies import get_db, user_exist
-from backend.schemas.event import EventCreate, EventUpdate, EventInDBBase
+from backend.schemas.event import EventCreate, EventInDBBase, EventUpdate
 from backend.utils import encode_query_params
-
 
 router = APIRouter(
     prefix="/event",

@@ -1,6 +1,4 @@
-from sqlalchemy import (
-    Column, DateTime, Integer, String, ForeignKey
-)
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 

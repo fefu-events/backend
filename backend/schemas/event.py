@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
-from dateutil import parser
 
+from dateutil import parser
 from pydantic import BaseModel, constr, root_validator
 
 

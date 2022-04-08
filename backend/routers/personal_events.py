@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, Request, Query
+from fastapi import APIRouter, Depends, Query, Request
 
 from backend import crud
 from backend.routers.dependencies import get_db, user_exist
@@ -25,7 +25,7 @@ def get_events(
     title: str = None,
     date_begin: datetime = None,
     date_end: datetime = None,
-    tags: List[str] = Query(None),
+    tags: list[str] = Query(None),
     user_id: int = None,
     personalize_tags: bool = None,
     db=Depends(get_db),
