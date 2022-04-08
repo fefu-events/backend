@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 
 from backend.crud.base import CRUDBase
 from backend.models.event import Event
+from backend.models.place import Place
+from backend.models.category import Category
 from backend.schemas.event import EventCreate, EventUpdate
 
 
@@ -23,7 +25,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         date_begin: datetime = None, date_end: datetime = None,
         user_id: int = None, tags: list[str] = None
     ) -> list[Event]:
-        query = db.query(self.model)
+        query = db.query(self.model).join(Place).join(Category)
 
         if title:
             query = query.filter(Event.title.contains(title))
