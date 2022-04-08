@@ -15,6 +15,7 @@ class EventBase(BaseModel):
 
 class EventCreate(EventBase):
     place_id: int
+    category_id: int
 
     @root_validator(pre=True)
     def date_end_must_be_larger_than_date_begin(cls, v):
