@@ -31,7 +31,6 @@ def get_events(
     db=Depends(get_db),
 ):
     tags_joint = request.state.current_user.tags + tags or []
-    print(tags_joint)
     events = crud.event.get_multi_with_filter(
         db, skip=skip, limit=limit, title=title,
         date_begin=date_begin, date_end=date_end, user_id=user_id,
