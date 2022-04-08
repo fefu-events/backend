@@ -3,6 +3,9 @@ from datetime import datetime, timezone
 from dateutil import parser
 from pydantic import BaseModel, constr, root_validator
 
+from backend.schemas.place import PlaceInDBBase
+from backend.schemas.category import CategoryInDBBase
+
 
 class EventBase(BaseModel):
     title: constr(max_length=100)
@@ -38,6 +41,8 @@ class EventUpdate(EventCreate):
 class EventInDBBase(EventBase):
     id: int
     user_id: int
+    place: PlaceInDBBase
+    category: CategoryInDBBase
 
     class Config:
         orm_mode = True
