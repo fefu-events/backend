@@ -23,7 +23,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     def get_multi_with_filter(
         self, db, skip: int, limit: int = 100, title: str = None,
         date_begin: datetime = None, date_end: datetime = None,
-        user_id: int = None, tags: list[str] = None
+        user_id: int = None, tags: list[str] = None,
+        user_tags: list[str] = None,
     ) -> list[Event]:
         query = db.query(self.model).join(Place).join(Category)
 
@@ -41,6 +42,9 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
 
         if tags:
             query = query.filter(Event.tags.contains(tags))
+
+        if user_tags:
+            query = query.filter(Event.tags.overlap(user_tags))
 
         return query.\
             order_by(Event.date_begin.desc(), Event.id.desc()).\
