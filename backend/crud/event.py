@@ -1,4 +1,3 @@
-from typing import Any, Optional, List
 from datetime import datetime
 
 from sqlalchemy.orm import Session
@@ -20,10 +19,10 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return db_obj
 
     def get_multi_with_filter(
-        self, db, skip, limit, title=None,
+        self, db, skip: int, limit: int = 100, title: str = None,
         date_begin: datetime = None, date_end: datetime = None,
-        user_id=None, tags: List[str] = None
-    ) -> List[Event]:
+        user_id: int = None, tags: list[str] = None
+    ) -> list[Event]:
         query = db.query(self.model)
 
         if title:

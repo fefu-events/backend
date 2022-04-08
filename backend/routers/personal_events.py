@@ -1,4 +1,3 @@
-from typing import List
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, Request, Query
@@ -17,7 +16,7 @@ router = APIRouter(
     "/",
     name="personal_events:get",
     dependencies=[Depends(user_exist)],
-    response_model=List[EventInDBBase],
+    response_model=list[EventInDBBase],
 )
 def get_events(
     request: Request,

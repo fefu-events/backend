@@ -1,9 +1,6 @@
-from typing import List, Dict
-
-
-def encode_query_params(params: Dict) -> str:
+def encode_query_params(params: dict[str, any]) -> str:
     result = "?"
-    processed_params_in_list: List[str] = []
+    processed_params_in_list: list[str] = []
     for name, value in params.items():
         if type(value) == list:
             for item in value:

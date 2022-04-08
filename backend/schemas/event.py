@@ -1,4 +1,3 @@
-from typing import List
 from datetime import datetime, timezone
 from dateutil import parser
 
@@ -11,7 +10,7 @@ class EventBase(BaseModel):
     date_begin: datetime
     date_end: datetime
     place_description: constr(max_length=100)
-    tags: List[constr(max_length=15)]
+    tags: list[constr(max_length=15)]
 
 
 class EventCreate(EventBase):

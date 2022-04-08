@@ -1,5 +1,3 @@
-from typing import List
-
 from pydantic import BaseModel, EmailStr
 
 
@@ -13,7 +11,7 @@ class UserBase(BaseModel):
     email: str
     is_admin: bool
     is_moderator: bool
-    tags: List[str]
+    tags: list[str]
 
 
 class UserCreate(BaseModel):
@@ -21,7 +19,7 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    tags: List[str]
+    tags: list[str]
 
 
 class UserInDBBase(UserBase):

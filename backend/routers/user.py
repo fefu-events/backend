@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import APIRouter, Depends, HTTPException, Request
 
 from backend import crud
@@ -16,7 +14,7 @@ router = APIRouter(
 @router.get(
     '/',
     name="user:get",
-    response_model=List[UserInDBBase],
+    response_model=list[UserInDBBase],
 )
 def get_users(
     skip: int = 0,

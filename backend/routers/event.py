@@ -1,4 +1,3 @@
-from typing import List
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Query
@@ -105,7 +104,7 @@ def get_event(
 @router.get(
     "/",
     name="event:get",
-    response_model=List[EventInDBBase],
+    response_model=list[EventInDBBase],
     dependencies=[Depends(user_exist)],
 )
 def get_events(
@@ -114,7 +113,7 @@ def get_events(
     title: str = None,
     date_begin: datetime = None,
     date_end: datetime = None,
-    tags: List[str] = Query(None),
+    tags: list[str] = Query(None),
     user_id: int = None,
     personalize_tags: bool = None,
     db=Depends(get_db),
