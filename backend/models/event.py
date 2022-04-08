@@ -16,4 +16,6 @@ class Event(Base):
     place_id = Column(Integer, ForeignKey('place.id'))
     place = relationship("Place", back_populates="events")
     place_description = Column(String(100), nullable=False)
+    category_id = Column(Integer, ForeignKey('category.id'))
+    category = relationship("Category", back_populates="events")
     tags = Column(ARRAY(String(15)), server_default='{}')
