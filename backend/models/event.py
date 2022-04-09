@@ -11,11 +11,14 @@ class Event(Base):
     description = Column(String(1000), nullable=False)
     date_begin = Column(DateTime, nullable=False)
     date_end = Column(DateTime, nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id',
+                                         ondelete="CASCADE"))
     user = relationship("User", back_populates="events")
-    place_id = Column(Integer, ForeignKey('place.id'))
+    place_id = Column(Integer, ForeignKey('place.id',
+                                          ondelete="CASCADE"))
     place = relationship("Place", back_populates="events")
     place_description = Column(String(100), nullable=False)
-    category_id = Column(Integer, ForeignKey('category.id'))
+    category_id = Column(Integer, ForeignKey('category.id',
+                                             ondelete="CASCADE"))
     category = relationship("Category", back_populates="events")
     tags = Column(ARRAY(String(15)), server_default='{}')
