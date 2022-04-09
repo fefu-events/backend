@@ -101,3 +101,29 @@ def unfollow_user(
         )
     return crud.user_subscription.remove(
         db, id=user_subscription.id)
+
+
+@router.get(
+    '/{user_id}/followers',
+    name="user:get_followers_by_user_id",
+    response_model=list[UserInDBBase],
+)
+def get_followers(
+    request: Request,
+    user_id: int,
+    db=Depends(get_db),
+):
+    return crud.user.get_followers(db, user_id=user_id)
+
+
+@router.get(
+    '/{user_id}/following',
+    name="user:get_followers_by_user_id",
+    response_model=list[UserInDBBase],
+)
+def get_following(
+    request: Request,
+    user_id: int,
+    db=Depends(get_db),
+):
+    return crud.user.get_following(db, user_id=user_id)
