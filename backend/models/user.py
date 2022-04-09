@@ -25,5 +25,6 @@ class User(Base):
     following = relationship(
         "UserSubscription",
         primaryjoin="User.id == UserSubscription.follower_id")
-    participations = relationship("Participation",
-                                  back_populates="users")
+    participations = relationship(
+        "Participation",
+        primaryjoin="User.id == Participation.user_id")

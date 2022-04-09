@@ -22,3 +22,6 @@ class Event(Base):
                                              ondelete="CASCADE"))
     category = relationship("Category", back_populates="events")
     tags = Column(ARRAY(String(15)), server_default='{}')
+    participations = relationship(
+        "Participation",
+        primaryjoin="Event.id == Participation.event_id")
