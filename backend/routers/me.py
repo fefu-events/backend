@@ -45,6 +45,7 @@ def update_me(
 @router.post(
     "/",
     name="me:create",
+    status_code=201,
     response_model=UserInDBBase,
 )
 async def register(
@@ -54,7 +55,7 @@ async def register(
     user = crud.user.get_by_email(db, user_azure.email)
     if user:
         raise HTTPException(
-            status_code=400,
+            status_code=409,
             detail=strings.USER_WITH_THIS_EMAIL_ALREADY_EXIST_ERROR
         )
     return crud.user.create(db, obj_in=user_azure)

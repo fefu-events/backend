@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import RedirectResponse
 
 from backend import crud
+from backend.resources import strings
 from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.event import EventCreate, EventInDBBase, EventUpdate
 from backend.utils import encode_query_params
@@ -17,6 +18,7 @@ router = APIRouter(
 @router.post(
     "/",
     name="event:create",
+    status_code=201,
     response_model=EventInDBBase,
     dependencies=[Depends(user_exist)],
 )
@@ -28,12 +30,14 @@ def create_event(
     place = crud.place.get(db, id=event_in.place_id)
     if not place:
         raise HTTPException(
-            status_code=404
+            status_code=422,
+            detail=strings.PLACE_DOES_NOT_EXIST_ERROR
         )
     category = crud.category.get(db, id=event_in.category_id)
     if not category:
         raise HTTPException(
-            status_code=404
+            status_code=422,
+            detail=strings.CATEGORY_DOES_NOT_EXIST_ERROR
         )
     return crud.event.create_with_user(
         db, obj_in=event_in, user_id=request.state.current_user.id)
@@ -55,12 +59,14 @@ def update_event(
 
     if not event:
         raise HTTPException(
-            status_code=404
+            status_code=404,
+            detail=strings.EVENT_DOES_NOT_EXIST_ERROR
         )
 
     if request.state.current_user.id != event.user_id:
         raise HTTPException(
-            status_code=403
+            status_code=403,
+            detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_UPDATE
         )
     return crud.event.update(db=db, db_obj=event, obj_in=event_in)
 
@@ -80,14 +86,16 @@ def delete_event(
 
     if not event:
         raise HTTPException(
-            status_code=404
+            status_code=404,
+            detail=strings.EVENT_DOES_NOT_EXIST_ERROR
         )
 
     if not request.state.current_user.is_admin and\
             not request.state.current_user.is_moderator and\
             (request.state.current_user.id != event.user_id):
         raise HTTPException(
-            status_code=403
+            status_code=403,
+            detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE
         )
     return crud.event.remove(db=db, id=event_id)
 
@@ -105,7 +113,8 @@ def get_event(
 
     if not event:
         raise HTTPException(
-            status_code=404
+            status_code=404,
+            detail=strings.EVENT_DOES_NOT_EXIST_ERROR
         )
     return event
 
