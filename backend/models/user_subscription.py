@@ -1,12 +1,11 @@
-from typing import TYPE_CHECKING
-
-from sqlalchemy import ARRAY, Boolean, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, ForeignKey
 
 from backend.database.base_class import Base
 
 
 class UserSubscription(Base):
     id = Column(Integer, primary_key=True, index=True)
-    follower_id = Column(Integer, ForeignKey('user.id'))
-    user_id = Column(Integer, ForeignKey('user.id'))
+    follower_id = Column(Integer, ForeignKey('user.id',
+                                             ondelete="CASCADE"))
+    user_id = Column(Integer, ForeignKey('user.id',
+                                         ondelete="CASCADE"))
