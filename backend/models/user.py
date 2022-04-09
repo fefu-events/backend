@@ -5,8 +5,11 @@ from sqlalchemy.orm import relationship
 
 from backend.database.base_class import Base
 
+from backend.models.user_subscription import UserSubscription
+
 if TYPE_CHECKING:
-    from .event import Event  # noqa: F401
+    from .event import Event # noqa: F401
+    from .user_subscription import UserSubscription # noqa: F401
 
 
 class User(Base):
@@ -17,3 +20,9 @@ class User(Base):
     is_admin = Column(Boolean, default=False, nullable=False)
     is_moderator = Column(Boolean, default=False, nullable=False)
     events = relationship("Event", back_populates="user")
+    followers = relationship(
+        "UserSubscription",
+        primaryjoin="User.id == UserSubscription.user_id")
+    following = relationship(
+        "UserSubscription",
+        primaryjoin="User.id == UserSubscription.follower_id")
