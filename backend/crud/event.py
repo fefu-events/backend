@@ -3,9 +3,9 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from backend.crud.base import CRUDBase
+from backend.models.category import Category
 from backend.models.event import Event
 from backend.models.place import Place
-from backend.models.category import Category
 from backend.schemas.event import EventCreate, EventUpdate
 
 

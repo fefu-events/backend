@@ -3,8 +3,7 @@ from sqlalchemy.orm import Session
 
 from backend.crud.base import CRUDBase
 from backend.models.user_subscription import UserSubscription
-from backend.schemas.user_subscription import\
-    UserSubscriptionCreate
+from backend.schemas.user_subscription import UserSubscriptionCreate
 
 
 class CRUDEvent(

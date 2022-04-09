@@ -3,8 +3,8 @@ from datetime import datetime, timezone
 from dateutil import parser
 from pydantic import BaseModel, constr, root_validator
 
-from backend.schemas.place import PlaceInDBBase
 from backend.schemas.category import CategoryInDBBase
+from backend.schemas.place import PlaceInDBBase
 
 
 class EventBase(BaseModel):

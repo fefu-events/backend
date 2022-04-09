@@ -4,10 +4,8 @@ from backend import crud
 from backend.resources import strings
 from backend.routers.dependencies import get_db, get_user_azure, user_exist
 from backend.schemas.user import UserAzure, UserInDBBase, UserUpdate
-from backend.schemas.user_subscription import (
-    UserSubscriptionCreate, UserSubscriptionInDBBase
-)
-
+from backend.schemas.user_subscription import (UserSubscriptionCreate,
+                                               UserSubscriptionInDBBase)
 
 router = APIRouter(
     prefix="/user",

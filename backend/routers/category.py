@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from backend import crud
 from backend.resources import strings
-from backend.routers.dependencies import user_exist, get_db
+from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.category import CategoryInDBBase
 
 router = APIRouter(
