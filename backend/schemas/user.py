@@ -1,6 +1,10 @@
 from pydantic import BaseModel, EmailStr
 
 
+class CurrentUserExist(BaseModel):
+    exist: bool
+
+
 class UserAzure(BaseModel):
     name: str
     email: str
