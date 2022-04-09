@@ -133,10 +133,11 @@ def get_events(
     date_end: datetime = None,
     tags: list[str] = Query(None),
     user_id: int = None,
+    subscriptions: bool = True,
     personalize_tags: bool = None,
     db=Depends(get_db),
 ):
-    if personalize_tags:
+    if personalize_tags or subscriptions:
         query_params = encode_query_params({
             "skip": skip,
             "limit": limit,
@@ -144,7 +145,9 @@ def get_events(
             "date_begin": date_begin,
             "date_end": date_end,
             "tags": tags,
-            "user_id": user_id
+            "user_id": user_id,
+            "subscriptions": subscriptions,
+            "personalize_tags": personalize_tags
         })
         return RedirectResponse(
             f"/personal-events{query_params}",

@@ -27,11 +27,14 @@ def get_events(
     date_end: datetime = None,
     tags: list[str] = Query(None),
     user_id: int = None,
+    subscriptions: bool = True,
     personalize_tags: bool = True,
     db=Depends(get_db),
 ):
     events = crud.event.get_multi_with_filter(
         db, skip=skip, limit=limit, title=title,
         date_begin=date_begin, date_end=date_end, user_id=user_id,
-        tags=tags, user_tags=request.state.current_user.tags)
+        tags=tags, user=request.state.current_user,
+        subscriptions=subscriptions,
+        personalize_tags=personalize_tags)
     return events

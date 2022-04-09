@@ -1,11 +1,14 @@
 from datetime import datetime
 
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from backend.crud.base import CRUDBase
 from backend.models.category import Category
 from backend.models.event import Event
 from backend.models.place import Place
+from backend.models.user import User
+from backend.models.user_subscription import UserSubscription
 from backend.schemas.event import EventCreate, EventUpdate
 
 
@@ -24,9 +27,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         self, db, skip: int, limit: int = 100, title: str = None,
         date_begin: datetime = None, date_end: datetime = None,
         user_id: int = None, tags: list[str] = None,
-        user_tags: list[str] = None,
+        user: User = None, subscriptions: bool = True,
+        personalize_tags: bool = True,
     ) -> list[Event]:
         query = db.query(self.model).join(Place).join(Category)
+
+        if subscriptions:
+            query = query.join(
+                UserSubscription,
+                user.id == UserSubscription.follower_id)
+            query = query.filter(
+                Event.user_id == UserSubscription.user_id)
 
         if title:
             query = query.filter(Event.title.contains(title))
@@ -43,8 +54,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         if tags:
             query = query.filter(Event.tags.contains(tags))
 
-        if user_tags:
-            query = query.filter(Event.tags.overlap(user_tags))
+        if user and personalize_tags:
+            query = query.filter(Event.tags.overlap(user.tags))
 
         return query.\
             order_by(Event.date_begin.desc(), Event.id.desc()).\
