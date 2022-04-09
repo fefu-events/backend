@@ -11,7 +11,6 @@ from backend.schemas.user_subscription import (
 
 router = APIRouter(
     prefix="/user",
-    tags=["user"],
 )
 
 
@@ -19,6 +18,7 @@ router = APIRouter(
     '/',
     name="user:get",
     response_model=list[UserInDBBase],
+    tags=["user"],
 )
 def get_users(
     skip: int = 0,
@@ -32,6 +32,7 @@ def get_users(
     '/{user_id}',
     name="user:get_by_id",
     response_model=UserInDBBase,
+    tags=["user"],
 )
 def get_user(
     user_id: int,
@@ -51,6 +52,7 @@ def get_user(
     name="user:follow_by_id",
     response_model=UserSubscriptionInDBBase,
     dependencies=[Depends(user_exist)],
+    tags=["user following"],
 )
 def follow_user(
     request: Request,
@@ -86,6 +88,7 @@ def follow_user(
     name="user:unfollow_by_id",
     response_model=UserSubscriptionInDBBase,
     dependencies=[Depends(user_exist)],
+    tags=["user following"],
 )
 def unfollow_user(
     request: Request,
@@ -107,6 +110,7 @@ def unfollow_user(
     '/{user_id}/followers',
     name="user:get_followers_by_user_id",
     response_model=list[UserInDBBase],
+    tags=["user following"],
 )
 def get_followers(
     request: Request,
@@ -120,6 +124,7 @@ def get_followers(
     '/{user_id}/following',
     name="user:get_followers_by_user_id",
     response_model=list[UserInDBBase],
+    tags=["user following"],
 )
 def get_following(
     request: Request,
