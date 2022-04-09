@@ -10,3 +10,5 @@ class Place(Base):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     events = relationship("Event", back_populates="place")
+    participations = relationship("Participation",
+                                  back_populates="places")
