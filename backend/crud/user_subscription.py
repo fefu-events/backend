@@ -20,4 +20,5 @@ class CRUDEvent(
                         self.model.follower_id == follower_id)).\
             first()
 
+
 user_subscription = CRUDEvent(UserSubscription)

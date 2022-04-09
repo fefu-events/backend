@@ -1,8 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, Request
 
 from backend import crud
-from backend.resources import strings
-from backend.routers.dependencies import get_db, get_user_azure, user_exist
+from backend.routers.dependencies import get_db, get_user_azure
 from backend.schemas.user import CurrentUserExist, UserAzure
 
 router = APIRouter(

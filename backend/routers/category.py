@@ -1,8 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, Request
 
 from backend import crud
-from backend.resources import strings
-from backend.routers.dependencies import get_db, user_exist
+from backend.routers.dependencies import get_db
 from backend.schemas.category import CategoryInDBBase
 
 router = APIRouter(
