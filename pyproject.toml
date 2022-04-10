@@ -20,6 +20,8 @@ python-dateutil = "^2.8.2"
 [tool.poetry.dev-dependencies]
 python-lsp-server = {extras = ["all"], version = "^1.4.1"}
 isort = "^5.10.1"
+pytest = "^7.1.1"
+requests = "^2.27.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
