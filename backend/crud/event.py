@@ -47,7 +47,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             query = query.filter(Event.date_begin >= date_begin)
 
         if date_end:
-            query = query.filter(Event.date_begin <= date_end)
+            query = query.filter(Event.date_end <= date_end)
 
         if user_id:
             query = query.filter(Event.user_id == user_id)
