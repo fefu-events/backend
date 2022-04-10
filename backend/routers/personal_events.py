@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, Query, Request
 from backend import crud
 from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.event import EventInDBBase
+from backend.utils import prepare_search_input
 
 router = APIRouter(
     prefix="/personal-events",
@@ -31,6 +32,9 @@ def get_events(
     personalize_tags: bool = True,
     db=Depends(get_db),
 ):
+    if title:
+        title, tags_from_title = prepare_search_input(title)
+        tags = tags + tags_from_title if tags else tags_from_title
     events = crud.event.get_multi_with_filter(
         db, skip=skip, limit=limit, title=title,
         date_begin=date_begin, date_end=date_end, user_id=user_id,

@@ -7,7 +7,7 @@ from backend import crud
 from backend.resources import strings
 from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.event import EventCreate, EventInDBBase, EventUpdate
-from backend.utils import encode_query_params
+from backend.utils import encode_query_params, prepare_search_input
 
 router = APIRouter(
     prefix="/event",
@@ -133,10 +133,13 @@ def get_events(
     date_end: datetime = None,
     tags: list[str] = Query(None),
     user_id: int = None,
-    subscriptions: bool = True,
-    personalize_tags: bool = None,
+    subscriptions: bool = False,
+    personalize_tags: bool = False,
     db=Depends(get_db),
 ):
+    if title:
+        title, tags_from_title = prepare_search_input(title)
+        tags = tags + tags_from_title if tags else tags_from_title
     if personalize_tags or subscriptions:
         query_params = encode_query_params({
             "skip": skip,
@@ -156,5 +159,5 @@ def get_events(
     events = crud.event.get_multi_with_filter(
         db, skip=skip, limit=limit, title=title,
         date_begin=date_begin, date_end=date_end, user_id=user_id,
-        tags=tags)
+        tags=tags, subscriptions=False, personalize_tags=False)
     return events
