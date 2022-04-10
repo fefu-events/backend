@@ -191,7 +191,7 @@ def follow_user(
     if participation:
         raise HTTPException(
             status_code=409,
-            detail=strings.HAVE_ALREADY_SUBSCRIBED_TO_THIS_USER_ERROR
+            detail=strings.ARE_ALREADY_PARTICIPATING_IN_THE_EVENT_ERROR
         )
 
     return crud.participation.create_with_user(

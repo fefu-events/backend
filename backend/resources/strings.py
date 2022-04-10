@@ -19,3 +19,5 @@ HAVE_ALREADY_SUBSCRIBED_TO_THIS_USER_ERROR =\
     "You have already subscribed to this user"
 ARE_NOT_FOLLOWING_THIS_USER =\
     "You are not following this user"
+ARE_ALREADY_PARTICIPATING_IN_THE_EVENT_ERROR =\
+    "You are already participating in the event"
