@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from backend.crud.base import CRUDBase
@@ -9,7 +8,9 @@ from backend.models.event import Event
 from backend.models.place import Place
 from backend.models.user import User
 from backend.models.user_subscription import UserSubscription
+from backend.models.participation import Participation
 from backend.schemas.event import EventCreate, EventUpdate
+from backend.schemas.participation import ParticipationCreate
 
 
 class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
