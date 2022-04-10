@@ -7,6 +7,8 @@ from backend import crud
 from backend.resources import strings
 from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.event import EventCreate, EventInDBBase, EventUpdate
+from backend.schemas.participation import ParticipationCreate,\
+    ParticipationInDBBase
 from backend.utils import encode_query_params, prepare_search_input
 
 router = APIRouter(
@@ -161,3 +163,37 @@ def get_events(
         date_begin=date_begin, date_end=date_end, user_id=user_id,
         tags=tags, subscriptions=False, personalize_tags=False)
     return events
+
+
+@router.post(
+    '/{event_id}/take-part',
+    name="event:take_part",
+    response_model=ParticipationInDBBase,
+    dependencies=[Depends(user_exist)],
+)
+def follow_user(
+    request: Request,
+    participation_in: ParticipationCreate,
+    db=Depends(get_db),
+):
+    event = crud.event.get(db, id=participation_in.event_id)
+
+    if not event:
+        raise HTTPException(
+            status_code=404,
+            detail=strings.EVENT_DOES_NOT_EXIST_ERROR
+        )
+
+    participation = crud.participation.get_by_event_and_user(
+        db, event_id=participation_in.event_id,
+        user_id=request.state.current_user.id)
+
+    if participation:
+        raise HTTPException(
+            status_code=409,
+            detail=strings.HAVE_ALREADY_SUBSCRIBED_TO_THIS_USER_ERROR
+        )
+
+    return crud.participation.create_with_user(
+        db, obj_in=participation_in,
+        user_id=request.state.current_user.id)
