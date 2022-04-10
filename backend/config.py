@@ -3,6 +3,8 @@ from pydantic import AnyHttpUrl, BaseSettings, Field
 
 class Settings(BaseSettings):
     DATABASE_URL: str = Field(default='', env='DATABASE_URL')
+    TEST_DATABASE_URL: str = Field(default='',
+                                   env="TEST_DATABASE_URL")
     SECRET_KEY: str = Field('my super secret key', env='SECRET_KEY')
     BACKEND_CORS_ORIGINS: list[str | AnyHttpUrl] = [
         'http://localhost:8000', 'http://localhost:8080',
