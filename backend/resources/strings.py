@@ -21,3 +21,6 @@ ARE_NOT_FOLLOWING_THIS_USER =\
     "You are not following this user"
 ARE_ALREADY_PARTICIPATING_IN_THE_EVENT_ERROR =\
     "You are already participating in the event"
+EVENT_HAS_BEEN_DELETED = "The event has been deleted"
+HAVE_BEEN_UNSUBSCRIBED = "You have been unsubscribed"
+ARE_NOT_PARTICIPATING = "You are not participating"

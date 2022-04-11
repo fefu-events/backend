@@ -6,6 +6,7 @@ from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.user import UserInDBBase
 from backend.schemas.user_subscription import (UserSubscriptionCreate,
                                                UserSubscriptionInDBBase)
+from backend.schemas.message import Message
 
 router = APIRouter(
     prefix="/user",
@@ -86,7 +87,7 @@ def follow_user(
 @router.delete(
     '/{user_id}/unfollow',
     name="user:unfollow_by_id",
-    response_model=UserSubscriptionInDBBase,
+    response_model=Message,
     dependencies=[Depends(user_exist)],
     tags=["user following"],
 )
@@ -103,8 +104,9 @@ def unfollow_user(
             status_code=409,
             detail=strings.ARE_NOT_FOLLOWING_THIS_USER
         )
-    return crud.user_subscription.remove(
-        db, id=user_subscription.id)
+    crud.user_subscription.remove(db, id=user_subscription.id)
+
+    return Message(detail=strings.ARE_NOT_FOLLOWING_THIS_USER)
 
 
 @router.get(

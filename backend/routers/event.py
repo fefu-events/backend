@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query,\
+    Request
 from fastapi.responses import RedirectResponse
 
 from backend import crud
@@ -9,6 +10,7 @@ from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.event import EventCreate, EventInDBBase, EventUpdate
 from backend.schemas.participation import ParticipationCreate,\
     ParticipationInDBBase
+from backend.schemas.message import Message
 from backend.utils import encode_query_params, prepare_search_input
 
 router = APIRouter(
@@ -76,7 +78,7 @@ def update_event(
 @router.delete(
     "/{event_id}",
     name="event:delete",
-    response_model=EventInDBBase,
+    response_model=Message,
     dependencies=[Depends(user_exist)],
 )
 def delete_event(
@@ -99,7 +101,11 @@ def delete_event(
             status_code=403,
             detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR
         )
-    return crud.event.remove(db=db, id=event_id)
+
+    crud.event.remove(db=db, id=event_id)
+    return Message(
+        detail=strings.EVENT_HAS_BEEN_DELETED
+    )
 
 
 @router.get(
