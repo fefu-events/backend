@@ -97,7 +97,7 @@ def delete_event(
             (request.state.current_user.id != event.user_id):
         raise HTTPException(
             status_code=403,
-            detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE
+            detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR
         )
     return crud.event.remove(db=db, id=event_id)
 
