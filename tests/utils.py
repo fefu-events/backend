@@ -1,7 +1,13 @@
 import string
 import random
+from datetime import datetime, timezone
+
+from dateutil import tz
+from dateutil.relativedelta import relativedelta
 
 from backend.schemas.user import UserAzure
+from backend.schemas.place import PlaceCreate
+from backend.schemas.category import CategoryCreate
 
 
 def get_random_str(length: int):
@@ -18,6 +24,20 @@ def get_random_user() -> UserAzure:
     return UserAzure(
         email=get_email(name),
         name=name,
+    )
+
+
+def get_random_place() -> PlaceCreate:
+    return PlaceCreate(
+        label=get_random_str(length=10),
+        latitude=random.uniform(0, 100),
+        longitude=random.uniform(0, 100),
+    )
+
+
+def get_random_category() -> CategoryCreate:
+    return CategoryCreate(
+        label=get_random_str(length=10),
     )
 
 
