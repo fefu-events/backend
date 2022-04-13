@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    -  uses: actions/checkout@v1
+    - name: Run tests
+      id: tests
+      run: docker-compose -f ./docker-compose-test.yml up --exit-code-from web
+    - name: send telegram message on push
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          ${{ github.actor }} created commit:
+          Commit message: ${{ github.event.commits[0].message }}
+          See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+          Tests: ${{ steps.tests.outcome }}
