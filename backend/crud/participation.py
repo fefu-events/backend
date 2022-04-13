@@ -19,10 +19,9 @@ class CRUDParticipation(
                         Participation.user_id == user_id)).first()
 
     def create_with_user(
-        self, db: Session, *, obj_in: ParticipationCreate,
-        user_id: int
+        self, db: Session, *, event_id: int, user_id: int
     ) -> Participation:
-        db_obj = Participation(**dict(obj_in), user_id=user_id)
+        db_obj = Participation(event_id=event_id, user_id=user_id)
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
