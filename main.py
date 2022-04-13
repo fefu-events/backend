@@ -12,6 +12,8 @@ from backend.routers.event import router as event_router
 from backend.routers.me import router as me_router
 from backend.routers.place import router as place_router
 from backend.routers.category import router as category_router
+from backend.routers.organization import router as\
+    organization_router
 
 app = FastAPI(
     swagger_ui_oauth2_redirect_url='/oauth2-redirect',
@@ -44,6 +46,7 @@ async def load_config() -> None:
 app.include_router(current_user_exist_router)
 app.include_router(me_router)
 app.include_router(user_router)
+app.include_router(organization_router)
 app.include_router(event_router)
 app.include_router(place_router)
 app.include_router(category_router)
