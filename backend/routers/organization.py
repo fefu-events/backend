@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 
+from backend.resources import strings
 from backend import crud
 from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.organization import OrganizationCreate,\
@@ -11,7 +12,7 @@ router = APIRouter(
 
 
 @router.get(
-    "",
+    "/",
     name="organization:get",
     response_model=list[OrganizationInDBBase],
     tags=["organization"]
@@ -22,6 +23,26 @@ def get_organizations(
     db=Depends(get_db),
 ):
     return crud.organization.get_multi(db, skip=skip, limit=limit)
+
+
+@router.get(
+    "/{organization_id}",
+    name="organization:get_by_id",
+    response_model=OrganizationInDBBase,
+    tags=["organization"]
+)
+def get_organization_by_id(
+    organization_id: int,
+    db=Depends(get_db),
+):
+    organization = crud.organization.get(db, id=organization_id)
+
+    if not organization:
+        raise HTTPException(
+            status_code=404,
+            detail=strings.ORGANIZATION_DOES_NOT_FOUND_ERROR
+        )
+    return organization
 
 
 @router.post(

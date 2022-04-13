@@ -24,3 +24,4 @@ ARE_ALREADY_PARTICIPATING_IN_THE_EVENT_ERROR =\
 EVENT_HAS_BEEN_DELETED = "The event has been deleted"
 HAVE_BEEN_UNSUBSCRIBED = "You have been unsubscribed"
 ARE_NOT_PARTICIPATING = "You are not participating"
+ORGANIZATION_DOES_NOT_FOUND_ERROR = "The organization is not found"
