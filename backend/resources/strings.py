@@ -36,6 +36,8 @@ ARE_ALREADY_PARTICIPATING_IN_THE_EVENT_ERROR =\
     "You are already participating in the event"
 PARTICIPATION_DOES_NOT_EXIST_ERROR = "The participation is not exist"
 ARE_NOT_PARTICIPATING = "You are not participating"
+HAVE_ALREADY_SUBSCRIBED_TO_THIS_USER_ERROR =\
+    "You have already subscribed to this user"
 
 # ORGANIZATION
 ORGANIZATION_DOES_NOT_FOUND_ERROR = "The organization is not found"
@@ -44,3 +46,5 @@ NOT_HAVE_PERMISSION_TO_UPDATE_THIS_ORGANIZATION =\
 NOT_HAVE_PERMISSION_TO_DELETE_THIS_ORGANIZATION =\
     "You do not have permission to delete this organization"
 ORGANIZATION_HAS_BEEN_DELETED = "The organization has been deleted"
+DO_NOT_HAVE_RIGHTS_TO_ADD_A_NEW_USER_TO_THE_ORGANIZATION =\
+ "You do not have rights to add a new user to the organization"
