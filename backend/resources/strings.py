@@ -47,4 +47,10 @@ NOT_HAVE_PERMISSION_TO_DELETE_THIS_ORGANIZATION =\
     "You do not have permission to delete this organization"
 ORGANIZATION_HAS_BEEN_DELETED = "The organization has been deleted"
 DO_NOT_HAVE_RIGHTS_TO_ADD_A_NEW_USER_TO_THE_ORGANIZATION =\
- "You do not have rights to add a new user to the organization"
+    "You do not have rights to add a new user to the organization"
+THE_USER_IS_ALREADY_A_MEMBER_OF_THE_ORGANIZATION =\
+    "The user is already a member of the organization"
+THE_USER_IS_NOT_A_MEMBER_OF_THE_ORGANIZATION =\
+    "The user is not a member of the organization"
+CANNOT_REMOVE_YOURSELF_FROM_AN_ORGANIZATION_WHEN_NO_MORE_OWNERS =\
+    "You cannot remove yourself from an organization when there are no more owners."
