@@ -25,3 +25,5 @@ EVENT_HAS_BEEN_DELETED = "The event has been deleted"
 HAVE_BEEN_UNSUBSCRIBED = "You have been unsubscribed"
 ARE_NOT_PARTICIPATING = "You are not participating"
 ORGANIZATION_DOES_NOT_FOUND_ERROR = "The organization is not found"
+NOT_HAVE_PERMISSION_TO_UPDATE_THIS_ORGANIZATION =\
+    "You do not have permission to update this organization"
