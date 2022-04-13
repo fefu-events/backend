@@ -165,17 +165,17 @@ def get_events(
 
 
 @router.post(
-    '/{event_id}/take-part',
-    name="event:take_part",
+    '/{event_id}/participant',
+    name="event:create_participant",
     response_model=ParticipationInDBBase,
     dependencies=[Depends(user_exist)],
 )
-def follow_user(
+def create_participant(
     request: Request,
-    participation_in: ParticipationCreate,
+    event_id: int,
     db=Depends(get_db),
 ):
-    event = crud.event.get(db, id=participation_in.event_id)
+    event = crud.event.get(db, id=event_id)
 
     if not event:
         raise HTTPException(
@@ -184,8 +184,7 @@ def follow_user(
         )
 
     participation = crud.participation.get_by_event_and_user(
-        db, event_id=participation_in.event_id,
-        user_id=request.state.current_user.id)
+        db, event_id=event_id, user_id=request.state.current_user.id)
 
     if participation:
         raise HTTPException(
@@ -194,5 +193,40 @@ def follow_user(
         )
 
     return crud.participation.create_with_user(
-        db, obj_in=participation_in,
+        db, event_id=event_id, user_id=request.state.current_user.id)
+
+
+@router.delete(
+    '/{event_id}/participant',
+    name="event:delete_participant",
+    response_model=Message,
+    dependencies=[Depends(user_exist)],
+)
+def delete_participant(
+    request: Request,
+    event_id: int,
+    db=Depends(get_db),
+):
+    event = crud.event.get(db, id=event_id)
+
+    if not event:
+        raise HTTPException(
+            status_code=409,
+            detail=strings.EVENT_DOES_NOT_EXIST_ERROR
+        )
+
+    participation = crud.participation.get_by_event_and_user(
+        db, event_id=event_id,
         user_id=request.state.current_user.id)
+
+    if not participation:
+        raise HTTPException(
+            status_code=409,
+            detail=strings.PARTICIPATION_DOES_NOT_EXIST_ERROR
+        )
+
+    crud.participation.remove(
+        db, id=participation.id)
+    return Message(
+        detail=strings.ARE_NOT_PARTICIPATING
+    )
