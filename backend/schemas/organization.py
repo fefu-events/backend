@@ -15,7 +15,7 @@ class OrganizationUpdate(OrganizationCreate):
     pass
 
 
-class CategoryInDBBase(OrganizationBase):
+class OrganizationInDBBase(OrganizationBase):
     id: int
 
     class Config:
