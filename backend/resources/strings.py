@@ -27,3 +27,6 @@ ARE_NOT_PARTICIPATING = "You are not participating"
 ORGANIZATION_DOES_NOT_FOUND_ERROR = "The organization is not found"
 NOT_HAVE_PERMISSION_TO_UPDATE_THIS_ORGANIZATION =\
     "You do not have permission to update this organization"
+NOT_HAVE_PERMISSION_TO_DELETE_THIS_ORGANIZATION =\
+    "You do not have permission to delete this organization"
+ORGANIZATION_HAS_BEEN_DELETED = "The organization has been deleted"

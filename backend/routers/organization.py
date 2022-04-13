@@ -5,6 +5,7 @@ from backend import crud
 from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.organization import OrganizationCreate,\
     OrganizationUpdate, OrganizationInDBBase
+from backend.schemas.message import Message
 
 router = APIRouter(
     prefix="/organization",
@@ -66,7 +67,6 @@ def create_organization(
 @router.put(
     "/{organization_id}",
     name="organization:update",
-    status_code=201,
     response_model=OrganizationInDBBase,
     dependencies=[Depends(user_exist)],
     tags=["organization"]
@@ -97,5 +97,40 @@ def update_organization(
             detail=strings.NOT_HAVE_PERMISSION_TO_UPDATE_THIS_ORGANIZATION
         )
 
-    return crud.organization.update(
-        db, db_obj=organization, obj_in=organization_in)
+
+@router.delete(
+    "/{organization_id}",
+    name="organization:update",
+    status_code=201,
+    response_model=Message,
+    dependencies=[Depends(user_exist)],
+    tags=["organization"]
+)
+def delete_organization(
+    request: Request,
+    organization_id: int,
+    db=Depends(get_db),
+):
+    organization = crud.organization.get(db, id=organization_id)
+
+    if not organization:
+        raise HTTPException(
+            status_code=404,
+            detail=strings.ORGANIZATION_DOES_NOT_FOUND_ERROR
+        )
+
+    user_organization = crud.user_organization.\
+        get_by_user_and_organization(
+            db, user_id=request.state.current_user.id,
+            organization_id=organization.id
+        )
+
+    if not user_organization or not user_organization.is_owner:
+        raise HTTPException(
+            status_code=403,
+            detail=strings.NOT_HAVE_PERMISSION_TO_UPDATE_THIS_ORGANIZATION
+        )
+
+    return Message(
+        detail=strings.ORGANIZATION_HAS_BEEN_DELETED
+    )
