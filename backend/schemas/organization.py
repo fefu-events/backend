@@ -17,6 +17,7 @@ class OrganizationUpdate(OrganizationCreate):
 
 class OrganizationInDBBase(OrganizationBase):
     id: int
+    is_verified: bool
 
     class Config:
         orm_mode = True
