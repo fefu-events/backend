@@ -15,7 +15,6 @@ from backend.utils import encode_query_params, prepare_search_input
 
 router = APIRouter(
     prefix="/event",
-    tags=["event"],
 )
 
 
@@ -25,6 +24,7 @@ router = APIRouter(
     status_code=201,
     response_model=EventInDBBase,
     dependencies=[Depends(user_exist)],
+    tags=["event"],
 )
 def create_event(
     request: Request,
@@ -52,6 +52,7 @@ def create_event(
     name="event:update",
     response_model=EventInDBBase,
     dependencies=[Depends(user_exist)],
+    tags=["event"],
 )
 def update_event(
     request: Request,
@@ -80,6 +81,7 @@ def update_event(
     name="event:delete",
     response_model=Message,
     dependencies=[Depends(user_exist)],
+    tags=["event"],
 )
 def delete_event(
     request: Request,
@@ -112,6 +114,7 @@ def delete_event(
     "/{event_id}",
     name="event:get_by_id",
     response_model=EventInDBBase,
+    tags=["event"],
 )
 def get_event(
     event_id: int,
@@ -131,6 +134,7 @@ def get_event(
     "/",
     name="event:get",
     response_model=list[EventInDBBase],
+    tags=["event"],
 )
 def get_events(
     skip: int = 0,
@@ -169,6 +173,7 @@ def get_events(
     name="event:create_participant",
     response_model=ParticipationInDBBase,
     dependencies=[Depends(user_exist)],
+    tags=["participant"],
 )
 def create_participant(
     request: Request,
@@ -201,6 +206,7 @@ def create_participant(
     name="event:delete_participant",
     response_model=Message,
     dependencies=[Depends(user_exist)],
+    tags=["participant"],
 )
 def delete_participant(
     request: Request,
