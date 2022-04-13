@@ -131,7 +131,6 @@ def get_event(
     "/",
     name="event:get",
     response_model=list[EventInDBBase],
-    dependencies=[Depends(user_exist)],
 )
 def get_events(
     skip: int = 0,
