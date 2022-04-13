@@ -10,6 +10,20 @@ router = APIRouter(
 )
 
 
+@router.get(
+    "",
+    name="organization:get",
+    response_model=list[OrganizationInDBBase],
+    tags=["organization"]
+)
+def get_organizations(
+    skip: int = 0,
+    limit: int = 100,
+    db=Depends(get_db),
+):
+    return crud.organization.get_multi(db, skip=skip, limit=limit)
+
+
 @router.post(
     "/",
     name="organization:create",
@@ -18,7 +32,7 @@ router = APIRouter(
     dependencies=[Depends(user_exist)],
     tags=["organization"]
 )
-def create_event(
+def create_organization(
     request: Request,
     organization_in: OrganizationCreate,
     db=Depends(get_db),
