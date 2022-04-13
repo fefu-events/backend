@@ -33,7 +33,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     ) -> list[Event]:
         query = db.query(self.model).join(Place).join(Category)
 
-        if subscriptions:
+        if user and subscriptions:
             query = query.join(
                 UserSubscription,
                 user.id == UserSubscription.follower_id)
