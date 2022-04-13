@@ -10,8 +10,6 @@ from backend.routers.current_user_exist import router as\
 from backend.routers.user import router as user_router
 from backend.routers.event import router as event_router
 from backend.routers.me import router as me_router
-from backend.routers.personal_events import router as\
-    personal_events_router
 from backend.routers.place import router as place_router
 from backend.routers.category import router as category_router
 
@@ -47,6 +45,5 @@ app.include_router(current_user_exist_router)
 app.include_router(me_router)
 app.include_router(user_router)
 app.include_router(event_router)
-app.include_router(personal_events_router)
 app.include_router(place_router)
 app.include_router(category_router)

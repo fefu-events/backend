@@ -141,6 +141,7 @@ def get_events(
     date_end: datetime = None,
     tags: list[str] = Query(None),
     user_id: int = None,
+    for_user_id: int = None,
     subscriptions: bool = False,
     personalize_tags: bool = False,
     db=Depends(get_db),
@@ -148,26 +149,19 @@ def get_events(
     if title:
         title, tags_from_title = prepare_search_input(title)
         tags = tags + tags_from_title if tags else tags_from_title
-    if personalize_tags or subscriptions:
-        query_params = encode_query_params({
-            "skip": skip,
-            "limit": limit,
-            "title": title,
-            "date_begin": date_begin,
-            "date_end": date_end,
-            "tags": tags,
-            "user_id": user_id,
-            "subscriptions": subscriptions,
-            "personalize_tags": personalize_tags
-        })
-        return RedirectResponse(
-            f"/personal-events{query_params}",
-            status_code=303,
-        )
+    user = None
+    if for_user_id:
+        user = crud.user.get(db, id=for_user_id)
+        if not user:
+            raise HTTPException(
+                status_code=409,
+                detail=strings.USER_DOES_NOT_EXIST_ERROR
+            )
     events = crud.event.get_multi_with_filter(
         db, skip=skip, limit=limit, title=title,
         date_begin=date_begin, date_end=date_end, user_id=user_id,
-        tags=tags, subscriptions=False, personalize_tags=False)
+        user=user, tags=tags, subscriptions=subscriptions,
+        personalize_tags=personalize_tags)
     return events
 
 
@@ -186,7 +180,7 @@ def follow_user(
 
     if not event:
         raise HTTPException(
-            status_code=404,
+            status_code=409,
             detail=strings.EVENT_DOES_NOT_EXIST_ERROR
         )
 
