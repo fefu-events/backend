@@ -7,3 +7,4 @@ from backend.models.place import Place  # noqa
 from backend.models.user import User  # noqa
 from backend.models.user_subscription import UserSubscription  # noqa
 from backend.models.participation import Participation # noqa
+from backend.models.organization import Organization # noqa
