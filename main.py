@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi_sqlalchemy import DBSessionMiddleware
 
 from backend.routers.authentication import azure_scheme
 from backend.config import settings
@@ -15,21 +14,15 @@ from backend.routers.category import router as category_router
 from backend.routers.organization import router as\
     organization_router
 
-app = FastAPI(
-    swagger_ui_oauth2_redirect_url='/oauth2-redirect',
-    swagger_ui_init_oauth={
-        'usePkceWithAuthorizationCodeGrant': True,
-        'clientId': settings.OPENAPI_CLIENT_ID,
-    },
-)
 
-app.add_middleware(DBSessionMiddleware, db_url=settings.DATABASE_URL)
+settings.configure_logging()
+app = FastAPI(**settings.fastapi_kwargs)
 
-if settings.BACKEND_CORS_ORIGINS:
+
+if settings.allowed_hosts:
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[
-            str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+        allow_origins=settings.allowed_hosts,
         allow_credentials=True,
         allow_methods=['*'],
         allow_headers=['*'],
