@@ -1,6 +1,6 @@
 import pytest
 
-from backend.database.session_test import SessionLocal, engine
+from backend.database.session import SessionLocal, engine
 from backend.database.base import Base
 
 
