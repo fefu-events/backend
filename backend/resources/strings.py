@@ -41,6 +41,8 @@ HAVE_ALREADY_SUBSCRIBED_TO_THIS_USER_ERROR =\
 
 # ORGANIZATION
 ORGANIZATION_DOES_NOT_FOUND_ERROR = "The organization is not found"
+NOT_HAVE_PERMISSION_TO_POST_BY_THIS_ORGANIZATION =\
+    "You do not have permission to post by this organization"
 NOT_HAVE_PERMISSION_TO_UPDATE_THIS_ORGANIZATION =\
     "You do not have permission to update this organization"
 NOT_HAVE_PERMISSION_TO_DELETE_THIS_ORGANIZATION =\
