@@ -17,7 +17,7 @@ EVENT_DOES_NOT_EXIST_ERROR = "The event is not exist"
 EVENT_DOES_NOT_HAVE_RIGHT_TO_UPDATE_ERROR =\
     "You do not have rights to update the event"
 EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR =\
-    "You do not have rights to update the event"
+    "You do not have rights to delete the event"
 EVENT_HAS_BEEN_DELETED = "The event has been deleted"
 
 # FOLLOW
