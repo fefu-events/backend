@@ -15,7 +15,7 @@ class AppEnvTypes(Enum):
 
 
 class BaseAppSettings(BaseSettings):
-    app_env: AppEnvTypes = AppEnvTypes.prod
+    app_env: AppEnvTypes = AppEnvTypes.test
 
     class Config:
         env_file = ".env"
