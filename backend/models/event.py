@@ -20,7 +20,11 @@ class Event(Base):
     place_description = Column(String(100), nullable=False)
     category_id = Column(Integer, ForeignKey('category.id',
                                              ondelete="CASCADE"))
-    category = relationship("Category", back_populates="events")
+    organization_id = Column(Integer, ForeignKey('organization.id',
+                                                 ondelete="CASCADE"),
+                             nullable=True)
+    organization = relationship("Organization")
+    category = relationship("Category")
     tags = Column(ARRAY(String(15)), server_default='{}')
     participations = relationship(
         "Participation",
