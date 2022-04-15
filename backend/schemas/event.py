@@ -5,6 +5,8 @@ from pydantic import BaseModel, constr, root_validator
 
 from backend.schemas.category import CategoryInDBBase
 from backend.schemas.place import PlaceInDBBase
+from backend.schemas.organization import OrganizationInDBBase
+from backend.schemas.user import UserInDBBase
 
 
 class EventBase(BaseModel):
@@ -19,6 +21,7 @@ class EventBase(BaseModel):
 class EventCreate(EventBase):
     place_id: int
     category_id: int
+    organization_id: int | None
 
     @root_validator(pre=True)
     def date_end_must_be_larger_than_date_begin(cls, v):
@@ -40,7 +43,8 @@ class EventUpdate(EventCreate):
 
 class EventInDBBase(EventBase):
     id: int
-    user_id: int
+    user: UserInDBBase
+    organization: OrganizationInDBBase | None
     place: PlaceInDBBase
     category: CategoryInDBBase
 
