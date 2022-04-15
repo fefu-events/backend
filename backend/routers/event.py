@@ -2,16 +2,14 @@ from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query,\
     Request
-from fastapi.responses import RedirectResponse
 
 from backend import crud
 from backend.resources import strings
 from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.event import EventCreate, EventInDBBase, EventUpdate
-from backend.schemas.participation import ParticipationCreate,\
-    ParticipationInDBBase
+from backend.schemas.participation import ParticipationInDBBase
 from backend.schemas.message import Message
-from backend.utils import encode_query_params, prepare_search_input
+from backend.utils import prepare_search_input
 
 router = APIRouter(
     prefix="/event",
@@ -43,6 +41,29 @@ def create_event(
             status_code=422,
             detail=strings.CATEGORY_DOES_NOT_EXIST_ERROR
         )
+
+    if event_in.organization_id is not None:
+        organization = crud.organization.get(
+            db, id=event_in.organization_id)
+
+        if not organization:
+            raise HTTPException(
+                status_code=409,
+                detail=strings.ORGANIZATION_DOES_NOT_FOUND_ERROR
+            )
+
+        user_organization = crud.user_organization.\
+            get_by_user_and_organization(
+                db, user_id=request.state.current_user.id,
+                organization_id=organization.id
+            )
+
+        if not user_organization or not user_organization.is_owner:
+            raise HTTPException(
+                status_code=403,
+                detail=strings.NOT_HAVE_PERMISSION_TO_POST_BY_THIS_ORGANIZATION
+            )
+
     return crud.event.create_with_user(
         db, obj_in=event_in, user_id=request.state.current_user.id)
 
