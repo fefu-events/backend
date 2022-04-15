@@ -116,14 +116,29 @@ def delete_event(
             status_code=404,
             detail=strings.EVENT_DOES_NOT_EXIST_ERROR
         )
+    if event.organization_id is not None:
+        organization = crud.organization.get(
+            db, id=event.organization_id)
 
-    if not request.state.current_user.is_admin and\
-            not request.state.current_user.is_moderator and\
-            (request.state.current_user.id != event.user_id):
-        raise HTTPException(
-            status_code=403,
-            detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR
-        )
+        user_organization = crud.user_organization.\
+            get_by_user_and_organization(
+                db, user_id=request.state.current_user.id,
+                organization_id=organization.id
+            )
+
+        if not user_organization:
+            raise HTTPException(
+                status_code=403,
+                detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR
+            )
+    else:
+        if not request.state.current_user.is_admin and\
+                not request.state.current_user.is_moderator and\
+                (request.state.current_user.id != event.user_id):
+            raise HTTPException(
+                status_code=403,
+                detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR
+            )
 
     crud.event.remove(db=db, id=event_id)
     return Message(
