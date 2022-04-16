@@ -220,19 +220,20 @@ def delete_user_organization(
             organization_id=organization.id
         )
 
-    if not user_organization or not user_organization.is_owner:
+    if not user_organization and not user_organization.is_owner:
         raise HTTPException(
             status_code=403,
             detail=strings.DO_NOT_HAVE_RIGHTS_TO_ADD_A_NEW_USER_TO_THE_ORGANIZATION
         )
 
-    owner_count = crud.organization.get_count_owners(
-        db, db_obj=organization)
-    if request.state.current_user.id == user_id and owner_count == 1:
-        raise HTTPException(
-            status_code=400,
-            detail=strings.CANNOT_REMOVE_YOURSELF_FROM_AN_ORGANIZATION_WHEN_NO_MORE_OWNERS
-        )
+    if user_organization.is_owner:
+        owner_count = crud.organization.get_count_owners(
+            db, db_obj=organization)
+        if owner_count == 1:
+            raise HTTPException(
+                status_code=400,
+                detail=strings.CANNOT_REMOVE_YOURSELF_FROM_AN_ORGANIZATION_WHEN_NO_MORE_OWNERS
+            )
 
     user_organization_2 = crud.user_organization.\
         get_by_user_and_organization(
