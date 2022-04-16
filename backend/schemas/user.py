@@ -1,5 +1,7 @@
 from pydantic import BaseModel, EmailStr
 
+from backend.schemas.organization import OrganizationInDBBase
+
 
 class CurrentUserExist(BaseModel):
     exist: bool
@@ -31,3 +33,7 @@ class UserInDBBase(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class UserWithOrganizationsInDBBase(UserInDBBase):
+    organizations: list[OrganizationInDBBase]

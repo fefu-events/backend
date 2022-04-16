@@ -3,7 +3,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from backend import crud
 from backend.resources import strings
 from backend.routers.dependencies import get_db, user_exist
-from backend.schemas.user import UserInDBBase
+from backend.schemas.user import UserInDBBase,\
+    UserWithOrganizationsInDBBase
 from backend.schemas.user_subscription import (UserSubscriptionCreate,
                                                UserSubscriptionInDBBase)
 from backend.schemas.message import Message
@@ -30,7 +31,7 @@ def get_users(
 @router.get(
     '/{user_id}',
     name="user:get_by_id",
-    response_model=UserInDBBase,
+    response_model=UserWithOrganizationsInDBBase,
     tags=["user"],
 )
 def get_user(
