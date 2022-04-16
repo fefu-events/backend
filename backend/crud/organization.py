@@ -41,5 +41,13 @@ class CRUDOrganization(
                 )).\
             count()
 
+    def get_by_id_with_members(
+        self, db: Session, id: any
+    ) -> Organization | None:
+        return db.query(self.model).\
+            join(Organization.members).\
+            filter(self.model.id == id).\
+            first()
+
 
 organization = CRUDOrganization(Organization)

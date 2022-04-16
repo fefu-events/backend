@@ -5,6 +5,8 @@ from backend import crud
 from backend.routers.dependencies import get_db, user_exist
 from backend.schemas.organization import OrganizationCreate,\
     OrganizationUpdate, OrganizationInDBBase
+from backend.schemas.organization_with_members import\
+    OrganizationInDBBaseWithMembers
 from backend.schemas.user_organization import\
     UserOrganizationCreate, UserOrganizationInDBBase
 from backend.schemas.message import Message
@@ -31,14 +33,15 @@ def get_organizations(
 @router.get(
     "/{organization_id}",
     name="organization:get_by_id",
-    response_model=OrganizationInDBBase,
+    response_model=OrganizationInDBBaseWithMembers,
     tags=["organization"]
 )
 def get_organization_by_id(
     organization_id: int,
     db=Depends(get_db),
 ):
-    organization = crud.organization.get(db, id=organization_id)
+    organization = crud.organization.get_by_id_with_members(
+        db, id=organization_id)
 
     if not organization:
         raise HTTPException(
