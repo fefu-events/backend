@@ -60,3 +60,7 @@ CANNOT_REMOVE_YOURSELF_FROM_AN_ORGANIZATION_WHEN_NO_MORE_OWNERS =\
 # ORGANIZATION FOLLOW
 HAVE_ALREADY_SUBSCRIBED_TO_THIS_ORGANIZATION_ERROR =\
     "You have already subscribed to this organization"
+ARE_NOT_FOLLOWING_THIS_ORGANIZATION =\
+    "You are not following this organization"
+ARE_NOT_FOLLOWING_THIS_ORGANIZATION =\
+    "You are not following this organization"
