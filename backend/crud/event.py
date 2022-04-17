@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from backend.crud.base import CRUDBase
@@ -41,7 +42,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 Event.user_id == UserSubscription.user_id)
 
         if title:
-            query = query.filter(Event.title.contains(title))
+            query = query.filter(func.lower(Event.title).contains(func.lower(title)))
 
         if date_begin:
             query = query.filter(Event.date_begin >= date_begin)
