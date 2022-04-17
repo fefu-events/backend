@@ -22,6 +22,6 @@ class User(Base):
         "Participation",
         primaryjoin="User.id == Participation.user_id")
     organizations = relationship(
-        'Organization', lazy="joined", secondary="userorganization",
+        'Organization', lazy="select", secondary="userorganization",
         backref='User',
         viewonly=True)

@@ -12,6 +12,6 @@ class Organization(Base):
     tags = Column(ARRAY(String(15)), server_default='{}')
     is_verified = Column(Boolean, default=False, nullable=False)
     members = relationship(
-        'User', lazy="joined", secondary="userorganization",
+        'User', lazy="select", secondary="userorganization",
         backref='Organization',
         viewonly=True)
