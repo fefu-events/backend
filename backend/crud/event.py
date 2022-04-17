@@ -9,9 +9,7 @@ from backend.models.event import Event
 from backend.models.place import Place
 from backend.models.user import User
 from backend.models.user_subscription import UserSubscription
-from backend.models.participation import Participation
 from backend.schemas.event import EventCreate, EventUpdate
-from backend.schemas.participation import ParticipationCreate
 
 
 class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
@@ -29,6 +27,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         self, db, skip: int, limit: int = 100, title: str = None,
         date_begin: datetime = None, date_end: datetime = None,
         user_id: int = None, organization_id: int = None,
+        category_id: int = None, place_id: int = None,
         tags: list[str] = None, user: User = None,
         subscriptions: bool = True, personalize_tags: bool = True,
     ) -> list[Event]:
@@ -42,7 +41,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 Event.user_id == UserSubscription.user_id)
 
         if title:
-            query = query.filter(func.lower(Event.title).contains(func.lower(title)))
+            query = query.filter(
+                func.lower(Event.title).contains(func.lower(title)))
 
         if date_begin:
             query = query.filter(Event.date_begin >= date_begin)
@@ -56,6 +56,14 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         if organization_id:
             query = query.filter(
                 Event.organization_id == organization_id)
+
+        if category_id:
+            query = query.filter(
+                Event.category_id == category_id)
+
+        if place_id:
+            query = query.filter(
+                Event.place_id == place_id)
 
         if tags:
             query = query.filter(Event.tags.contains(tags))

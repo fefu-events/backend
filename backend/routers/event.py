@@ -181,6 +181,8 @@ def get_events(
     tags: list[str] = Query(None),
     user_id: int = None,
     organization_id: int = None,
+    category_id: int = None,
+    place_id: int = None,
     for_user_id: int = None,
     subscriptions: bool = False,
     personalize_tags: bool = False,
@@ -200,8 +202,9 @@ def get_events(
     events = crud.event.get_multi_with_filter(
         db, skip=skip, limit=limit, title=title,
         date_begin=date_begin, date_end=date_end, user_id=user_id,
-        organization_id=organization_id,
-        user=user, tags=tags, subscriptions=subscriptions,
+        organization_id=organization_id, place_id=place_id,
+        category_id=category_id, user=user, tags=tags,
+        subscriptions=subscriptions,
         personalize_tags=personalize_tags)
     return events
 
