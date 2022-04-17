@@ -1,8 +1,10 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String,\
+    select, func
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, object_session
 
 from backend.database.base_class import Base
+from backend.models.participation import Participation
 
 
 class Event(Base):
@@ -29,3 +31,10 @@ class Event(Base):
     participations = relationship(
         "Participation",
         primaryjoin="Event.id == Participation.event_id")
+
+    @property
+    def participant_count(self):
+        return object_session(self).\
+            scalar(
+                select(func.count(Participation.id)).where(Participation.event_id == self.id)
+            )

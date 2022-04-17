@@ -47,6 +47,7 @@ class EventInDBBase(EventBase):
     organization: OrganizationInDBBase | None
     place: PlaceInDBBase
     category: CategoryInDBBase
+    participant_count: int
 
     class Config:
         orm_mode = True
