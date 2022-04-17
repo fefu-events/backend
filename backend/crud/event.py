@@ -29,7 +29,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         self, db, skip: int, limit: int = 100, title: str = None,
         date_begin: datetime = None, date_end: datetime = None,
         user_id: int = None, organization_id: int = None,
-        category_id: int = None, place_id: int = None,
+        category_ids: int = None, place_ids: int = None,
         tags: list[str] = None, user: User = None,
         subscriptions: bool = True, personalize_tags: bool = True,
     ) -> list[Event]:
@@ -67,13 +67,13 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             query = query.filter(
                 Event.organization_id == organization_id)
 
-        if category_id:
+        if category_ids:
             query = query.filter(
-                Event.category_id == category_id)
+                Event.category_id.in_(category_ids))
 
-        if place_id:
+        if place_ids:
             query = query.filter(
-                Event.place_id == place_id)
+                Event.place_id.in_(place_ids))
 
         if tags:
             query = query.filter(Event.tags.contains(tags))
