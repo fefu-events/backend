@@ -9,6 +9,8 @@ from backend.schemas.organization_with_members import\
     OrganizationInDBBaseWithMembers
 from backend.schemas.user_organization import\
     UserOrganizationCreate, UserOrganizationInDBBase
+from backend.schemas.organization_subscription import\
+    OrganizationSubscriptionCreate, OrganizationSubscriptionInDBBase
 from backend.schemas.message import Message
 
 router = APIRouter(
@@ -251,3 +253,36 @@ def delete_user_organization(
 
     return crud.user_organization.remove(
         db, id=user_organization_2.id)
+
+
+@router.post(
+    '/{organization_id}/follow',
+    name="organization:follow_by_id",
+    response_model=OrganizationSubscriptionInDBBase,
+    dependencies=[Depends(user_exist)],
+    tags=["organization following"],
+)
+def follow_organization(
+    request: Request,
+    organization_id: int,
+    db=Depends(get_db),
+):
+    organization = crud.organization.get(db, organization_id)
+    if not organization:
+        raise HTTPException(
+            status_code=404,
+            detail=strings.ORGANIZATION_DOES_NOT_FOUND_ERROR
+        )
+    create_data = {
+        'follower_id': request.state.current_user.id,
+        'organization_id': organization_id
+    }
+    organization_subscription = crud.organization_subscription.\
+        get_by_users(db, **create_data)
+    if organization_subscription:
+        raise HTTPException(
+            status_code=409,
+            detail=strings.HAVE_ALREADY_SUBSCRIBED_TO_THIS_ORGANIZATION_ERROR
+        )
+    return crud.organization_subscription.create(
+        db, obj_in=OrganizationSubscriptionCreate(**create_data))

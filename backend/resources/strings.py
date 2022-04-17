@@ -20,7 +20,7 @@ EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR =\
     "You do not have rights to delete the event"
 EVENT_HAS_BEEN_DELETED = "The event has been deleted"
 
-# FOLLOW
+# USER FOLLOW
 CAN_NOT_SUBSCRIBE_TO_YOURSELF_ERROR =\
     "You can not subscribe to yourself"
 CAN_NOT_SUBSCRIBE_TO_YOURSELF_ERROR =\
@@ -56,3 +56,7 @@ THE_USER_IS_NOT_A_MEMBER_OF_THE_ORGANIZATION =\
     "The user is not a member of the organization"
 CANNOT_REMOVE_YOURSELF_FROM_AN_ORGANIZATION_WHEN_NO_MORE_OWNERS =\
     "You cannot remove yourself from an organization when there are no more owners."
+
+# ORGANIZATION FOLLOW
+HAVE_ALREADY_SUBSCRIBED_TO_THIS_ORGANIZATION_ERROR =\
+    "You have already subscribed to this organization"
