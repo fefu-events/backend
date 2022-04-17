@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
 from backend.crud.base import CRUDBase
@@ -9,6 +9,8 @@ from backend.models.event import Event
 from backend.models.place import Place
 from backend.models.user import User
 from backend.models.user_subscription import UserSubscription
+from backend.models.organization_subscription import\
+    OrganizationSubscription
 from backend.schemas.event import EventCreate, EventUpdate
 
 
@@ -36,9 +38,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         if user and subscriptions:
             query = query.join(
                 UserSubscription,
-                user.id == UserSubscription.follower_id)
-            query = query.filter(
-                Event.user_id == UserSubscription.user_id)
+                user.id == UserSubscription.follower_id,
+                isouter=True
+            ).join(
+                OrganizationSubscription,
+                user.id == OrganizationSubscription.follower_id,
+                isouter=True
+            )
+            query = query.filter(or_(
+                Event.user_id == UserSubscription.user_id,
+                Event.organization_id == OrganizationSubscription.organization_id
+            ))
 
         if title:
             query = query.filter(
