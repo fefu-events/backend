@@ -13,4 +13,5 @@ class Organization(Base):
     is_verified = Column(Boolean, default=False, nullable=False)
     members = relationship(
         'User', lazy="joined", secondary="userorganization",
-        backref='Organization')
+        backref='Organization',
+        viewonly=True)

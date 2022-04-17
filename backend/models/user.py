@@ -23,4 +23,5 @@ class User(Base):
         primaryjoin="User.id == Participation.user_id")
     organizations = relationship(
         'Organization', lazy="joined", secondary="userorganization",
-        backref='User')
+        backref='User',
+        viewonly=True)
