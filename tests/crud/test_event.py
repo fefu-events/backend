@@ -33,8 +33,8 @@ def test_create_event(db):
                                         user_id=user.id)
     assert event.title == event_data.title
     assert event.description == event_data.description
-    assert event.date_begin == event_data.date_begin.replace(tzinfo=None)
-    assert event.date_end == event_data.date_end.replace(tzinfo=None)
+    assert event.date_begin == event_data.date_begin
+    assert event.date_end == event_data.date_end
     assert event.place_description == event_data.place_description
     assert event.tags == event_data.tags
     assert event.place.id == place.id
