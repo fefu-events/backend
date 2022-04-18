@@ -23,9 +23,11 @@ router = APIRouter(
 def get_users(
     skip: int = 0,
     limit: int = 100,
+    search_query: str = None,
     db=Depends(get_db),
 ):
-    return crud.user.get_multi(db, skip=skip, limit=limit)
+    return crud.user.get_multi_by_email_or_name(
+        db, skip=skip, limit=limit, search_query=search_query)
 
 
 @router.get(
