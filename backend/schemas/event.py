@@ -51,3 +51,16 @@ class EventInDBBase(EventBase):
 
     class Config:
         orm_mode = True
+
+
+class EventWithAmIParticipationInDBBase(EventBase):
+    id: int
+    user: UserInDBBase
+    organization: OrganizationInDBBase | None
+    place: PlaceInDBBase
+    category: CategoryInDBBase
+    participant_count: int
+    am_i_participation: bool | None
+
+    class Config:
+        orm_mode = True

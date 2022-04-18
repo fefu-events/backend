@@ -3,8 +3,7 @@ from sqlalchemy.orm import Session
 
 from backend.crud.base import CRUDBase
 from backend.models.participation import Participation
-from backend.schemas.participation import ParticipationCreate,\
-    ParticipationInDBBase
+from backend.schemas.participation import ParticipationCreate
 
 
 class CRUDParticipation(

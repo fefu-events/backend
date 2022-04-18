@@ -1,12 +1,14 @@
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query,\
-    Request
+    Request, status
 
 from backend import crud
 from backend.resources import strings
-from backend.routers.dependencies import get_db, user_exist
-from backend.schemas.event import EventCreate, EventInDBBase, EventUpdate
+from backend.routers.dependencies import get_db, user_exist,\
+    user_exist_without_error
+from backend.schemas.event import EventCreate, EventInDBBase,\
+    EventUpdate, EventWithAmIParticipationInDBBase
 from backend.schemas.participation import ParticipationInDBBase
 from backend.schemas.message import Message
 from backend.utils import prepare_search_input
@@ -149,21 +151,32 @@ def delete_event(
 @router.get(
     "/{event_id}",
     name="event:get_by_id",
-    response_model=EventInDBBase,
+    response_model=EventWithAmIParticipationInDBBase,
+    dependencies=[Depends(user_exist_without_error)],
     tags=["event"],
 )
 def get_event(
+    request: Request,
     event_id: int,
     db=Depends(get_db),
 ):
-    event = crud.event.get(db, id=event_id)
+    user = request.state.current_user
+    user_id = user.id if user else None
+    event = crud.event.get(
+        db, id=event_id)
+
+    result = EventWithAmIParticipationInDBBase.from_orm(event)
+
+    result.am_i_participation =\
+        crud.participation.get_by_event_and_user(
+            db, event_id=event.id, user_id=user_id) is not None
 
     if not event:
         raise HTTPException(
             status_code=404,
             detail=strings.EVENT_DOES_NOT_EXIST_ERROR
         )
-    return event
+    return result
 
 
 @router.get(
