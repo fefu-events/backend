@@ -10,6 +10,10 @@ class UserOrganizationCreate(UserOrganizationBase):
     organization_id: int
 
 
+class UserOrganizationUpdate(BaseModel):
+    is_owner: bool
+
+
 class UserOrganizationCreateWithIsOwner(UserOrganizationCreate):
     is_owner: bool = Field(default=False)
 

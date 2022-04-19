@@ -14,6 +14,10 @@ class OrganizationUpdate(OrganizationCreate):
     pass
 
 
+class OrganizationTransferOwnership(BaseModel):
+    user_id: int
+
+
 class OrganizationInDBBase(OrganizationBase):
     id: int
     is_verified: bool
