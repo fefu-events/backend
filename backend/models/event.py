@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String,\
+from sqlalchemy import Column, ForeignKey, Integer, String,\
     select, func
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship, object_session
@@ -32,6 +32,7 @@ class Event(Base):
     participations = relationship(
         "Participation",
         primaryjoin="Event.id == Participation.event_id")
+    url = Column(String(2083), default="", nullable=False)
 
     @property
     def participant_count(self):
