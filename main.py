@@ -13,6 +13,8 @@ from backend.routers.place import router as place_router
 from backend.routers.category import router as category_router
 from backend.routers.organization import router as\
     organization_router
+from backend.routers.map import router as\
+    map_router
 
 
 settings.configure_logging()
@@ -42,4 +44,5 @@ app.include_router(user_router)
 app.include_router(organization_router)
 app.include_router(event_router)
 app.include_router(place_router)
+app.include_router(map_router)
 app.include_router(category_router)

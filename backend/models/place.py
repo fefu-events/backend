@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Float, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, query_expression
 
 from backend.database.base_class import Base
 
@@ -10,3 +10,5 @@ class Place(Base):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     events = relationship("Event", back_populates="place")
+
+    event_count = query_expression()

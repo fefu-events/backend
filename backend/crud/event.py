@@ -26,7 +26,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return db_obj
 
     def get_multi_with_filter(
-        self, db, skip: int, limit: int = 100, title: str = None,
+        self, db, skip: int, limit: int = 100,
+        title: str = None,
         date_begin: datetime = None, date_end: datetime = None,
         user_id: int = None, organization_id: int = None,
         category_ids: int = None, place_ids: int = None,

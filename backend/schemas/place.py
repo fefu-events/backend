@@ -20,3 +20,7 @@ class PlaceInDBBase(PlaceBase):
 
     class Config:
         orm_mode = True
+
+
+class PlaceForMapInDBBase(PlaceInDBBase):
+    event_count: int
