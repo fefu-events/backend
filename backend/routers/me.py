@@ -3,7 +3,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from backend import crud
 from backend.resources import strings
 from backend.routers.dependencies import get_db, get_user_azure, user_exist
-from backend.schemas.user import UserAzure, UserInDBBase, UserUpdate
+from backend.schemas.user import UserAzure, UserInDBBase,\
+    UserWithOrganizationsInDBBase, UserUpdate
 
 router = APIRouter(
     prefix="/me",
@@ -14,7 +15,7 @@ router = APIRouter(
 @router.get(
     "/",
     name="me:get",
-    response_model=UserInDBBase,
+    response_model=UserWithOrganizationsInDBBase,
     dependencies=[Depends(user_exist)],
 )
 def get_me(
