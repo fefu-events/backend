@@ -14,6 +14,10 @@ class UserOrganizationUpdate(BaseModel):
     is_owner: bool
 
 
+class UserOrganizationDelete(BaseModel):
+    user_id: int
+
+
 class UserOrganizationCreateWithIsOwner(UserOrganizationCreate):
     is_owner: bool = Field(default=False)
 

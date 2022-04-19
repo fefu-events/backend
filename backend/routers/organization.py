@@ -9,7 +9,8 @@ from backend.schemas.organization import OrganizationCreate,\
 from backend.schemas.organization_with_members import\
     OrganizationInDBBaseWithMembers
 from backend.schemas.user_organization import\
-    UserOrganizationCreate, UserOrganizationInDBBase
+    UserOrganizationCreate, UserOrganizationDelete,\
+    UserOrganizationInDBBase
 from backend.schemas.organization_subscription import\
     OrganizationSubscriptionCreate, OrganizationSubscriptionInDBBase
 from backend.schemas.message import Message
@@ -209,9 +210,10 @@ def create_user_organization(
 def delete_user_organization(
     request: Request,
     organization_id: int,
-    user_id: int,
+    user_organization_in: UserOrganizationDelete,
     db=Depends(get_db),
 ):
+    user_id = user_organization_in.user_id
     organization = crud.organization.get(db, id=organization_id)
 
     if not organization:
