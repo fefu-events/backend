@@ -3,15 +3,17 @@ from datetime import datetime
 
 from fastapi import (
     APIRouter, Depends, HTTPException, Query,
-    Request
 )
 
 from backend import crud
 from backend.api.dependencies.database import get_db
 from backend.api.dependencies.user import (
-    user_exist,
-    user_exist_without_error
+    get_current_user
 )
+from backend.api.dependencies.event import (
+    get_event_by_id_from_path
+)
+from backend.schemas.user import UserInDBBase
 from backend.schemas.event import (
     EventCreate,
     EventInDBBase,
@@ -30,75 +32,54 @@ router = APIRouter()
     name="event:create",
     status_code=201,
     response_model=EventInDBBase,
-    dependencies=[Depends(user_exist)],
     tags=["event"],
 )
 def create_event(
-    request: Request,
     event_in: EventCreate,
     db=Depends(get_db),
+    current_user: UserInDBBase = Depends(get_current_user()),
 ):
     place = crud.place.get(db, id=event_in.place_id)
     if not place:
-        raise HTTPException(
-            status_code=422,
-            detail=strings.PLACE_DOES_NOT_EXIST_ERROR
-        )
+        raise HTTPException(status_code=422,
+                            detail=strings.PLACE_DOES_NOT_EXIST_ERROR)
     category = crud.category.get(db, id=event_in.category_id)
     if not category:
-        raise HTTPException(
-            status_code=422,
-            detail=strings.CATEGORY_DOES_NOT_EXIST_ERROR
-        )
-
+        raise HTTPException(status_code=422,
+                            detail=strings.CATEGORY_DOES_NOT_EXIST_ERROR)
     if event_in.organization_id is not None:
-        organization = crud.organization.get(
-            db, id=event_in.organization_id)
-
+        organization = crud.organization.get(db, id=event_in.organization_id)
         if not organization:
             raise HTTPException(
                 status_code=409,
                 detail=strings.ORGANIZATION_DOES_NOT_FOUND_ERROR
             )
-
         user_organization = crud.user_organization.\
-            get_by_user_and_organization(
-                db, user_id=request.state.current_user.id,
-                organization_id=organization.id
-            )
-
-        if not user_organization or not user_organization.is_owner:
+            get_by_user_and_organization(db, user_id=current_user.id,
+                                         organization_id=organization.id)
+        if not user_organization:
             raise HTTPException(
                 status_code=403,
                 detail=strings.NOT_HAVE_PERMISSION_TO_POST_BY_THIS_ORGANIZATION
             )
 
     return crud.event.create_with_user(
-        db, obj_in=event_in, user_id=request.state.current_user.id)
+        db, obj_in=event_in, user_id=current_user.id)
 
 
 @router.put(
     "/{event_id}",
     name="event:update",
     response_model=EventInDBBase,
-    dependencies=[Depends(user_exist)],
     tags=["event"],
 )
 def update_event(
-    request: Request,
-    event_id: int,
     event_in: EventUpdate,
+    event: EventInDBBase = Depends(get_event_by_id_from_path),
+    current_user: UserInDBBase = Depends(get_current_user()),
     db=Depends(get_db),
 ):
-    event = crud.event.get(db, id=event_id)
-
-    if not event:
-        raise HTTPException(
-            status_code=404,
-            detail=strings.EVENT_DOES_NOT_EXIST_ERROR
-        )
-
-    if request.state.current_user.id != event.user_id:
+    if current_user.id != event.user_id:
         raise HTTPException(
             status_code=403,
             detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_UPDATE
@@ -110,28 +91,21 @@ def update_event(
     "/{event_id}",
     name="event:delete",
     response_model=Message,
-    dependencies=[Depends(user_exist)],
     tags=["event"],
 )
 def delete_event(
-    request: Request,
     event_id,
+    event: EventInDBBase = Depends(get_event_by_id_from_path),
+    current_user: UserInDBBase = Depends(get_current_user()),
     db=Depends(get_db),
 ):
-    event = crud.event.get(db, id=event_id)
-
-    if not event:
-        raise HTTPException(
-            status_code=404,
-            detail=strings.EVENT_DOES_NOT_EXIST_ERROR
-        )
     if event.organization_id is not None:
         organization = crud.organization.get(
             db, id=event.organization_id)
 
         user_organization = crud.user_organization.\
             get_by_user_and_organization(
-                db, user_id=request.state.current_user.id,
+                db, user_id=current_user.id,
                 organization_id=organization.id
             )
 
@@ -141,48 +115,35 @@ def delete_event(
                 detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR
             )
     else:
-        if not request.state.current_user.is_admin and\
-                not request.state.current_user.is_moderator and\
-                (request.state.current_user.id != event.user_id):
+        if not current_user.is_admin and\
+                not current_user.is_moderator and\
+                current_user.id != event.user_id:
             raise HTTPException(
                 status_code=403,
                 detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR
             )
 
     crud.event.remove(db=db, id=event_id)
-    return Message(
-        detail=strings.EVENT_HAS_BEEN_DELETED
-    )
+    return Message(detail=strings.EVENT_HAS_BEEN_DELETED)
 
 
 @router.get(
     "/{event_id}",
     name="event:get_by_id",
     response_model=EventWithAmIParticipationInDBBase,
-    dependencies=[Depends(user_exist_without_error)],
     tags=["event"],
 )
 def get_event(
-    request: Request,
-    event_id: int,
+    event: EventInDBBase = Depends(get_event_by_id_from_path),
+    current_user: UserInDBBase = Depends(get_current_user(required=False)),
     db=Depends(get_db),
 ):
-    user = request.state.current_user
-    user_id = user.id if user else None
-    event = crud.event.get(
-        db, id=event_id)
-
+    user_id = current_user.id if current_user else None
+    event = crud.event.get(db, id=event.id)
     result = EventWithAmIParticipationInDBBase.from_orm(event)
-
-    result.am_i_participation =\
-        crud.participation.get_by_event_and_user(
-            db, event_id=event.id, user_id=user_id) is not None
-
-    if not event:
-        raise HTTPException(
-            status_code=404,
-            detail=strings.EVENT_DOES_NOT_EXIST_ERROR
-        )
+    result.am_i_participation = crud.participation.get_by_event_and_user(
+        db, event_id=event.id, user_id=user_id
+    ) is not None
     return result
 
 
