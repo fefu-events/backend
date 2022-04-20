@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from dateutil import parser
-from pydantic import BaseModel, constr, root_validator, HttpUrl
+from pydantic import BaseModel, constr, root_validator, HttpUrl, Field
 
 from backend.schemas.category import CategoryInDBBase
 from backend.schemas.place import PlaceInDBBase
@@ -16,7 +16,7 @@ class EventBase(BaseModel):
     date_end: datetime
     place_description: constr(max_length=100)
     tags: list[constr(max_length=15)]
-    url: HttpUrl
+    url: HttpUrl | None = Field(default="")
 
 
 class EventCreate(EventBase):
