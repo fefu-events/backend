@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 
 from backend import crud
 from backend.api.dependencies.database import get_db
@@ -16,6 +16,7 @@ from backend.schemas.organization_with_members import (
 )
 from backend.schemas.user import UserInDBBase
 from backend.schemas.message import Message
+from backend.services.organization import check_user_can_modify_organization
 from backend.resources import strings
 
 
@@ -78,12 +79,10 @@ def update_organization(
     organization: OrganizationInDBBase =
         Depends(get_organization_by_id_from_path),
 ):
-    user_organization = crud.user_organization.\
-        get_by_user_and_organization(
+    if not check_user_can_modify_organization(
+        crud.user_organization.get_by_user_and_organization(
             db, user_id=current_user.id,
-            organization_id=organization.id
-        )
-    if not user_organization or not user_organization.is_owner:
+            organization_id=organization.id)):
         raise HTTPException(
             status_code=403,
             detail=strings.NOT_HAVE_PERMISSION_TO_UPDATE_THIS_ORGANIZATION
@@ -104,12 +103,10 @@ def delete_organization(
     organization: OrganizationInDBBase =
         Depends(get_organization_by_id_from_path),
 ):
-    user_organization = crud.user_organization.\
-        get_by_user_and_organization(
+    if not check_user_can_modify_organization(
+        crud.user_organization.get_by_user_and_organization(
             db, user_id=current_user.id,
-            organization_id=organization.id
-        )
-    if not user_organization or not user_organization.is_owner:
+            organization_id=organization.id)):
         raise HTTPException(
             status_code=403,
             detail=strings.NOT_HAVE_PERMISSION_TO_UPDATE_THIS_ORGANIZATION

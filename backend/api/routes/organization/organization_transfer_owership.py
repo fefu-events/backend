@@ -12,6 +12,7 @@ from backend.schemas.organization import (
     OrganizationTransferOwnership,
 )
 from backend.schemas.message import Message
+from backend.services.organization import check_user_can_modify_organization
 from backend.resources import strings
 
 router = APIRouter()
@@ -35,7 +36,7 @@ def transfer_ownership(
             organization_id=organization.id
         )
 
-    if not user_organization_1 or not user_organization_1.is_owner:
+    if not check_user_can_modify_organization(user_organization_1):
         raise HTTPException(
             status_code=403,
             detail=strings.DO_NOT_HAVE_RIGHTS_TO_ADD_A_NEW_USER_TO_THE_ORGANIZATION
