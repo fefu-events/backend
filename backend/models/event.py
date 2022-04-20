@@ -32,7 +32,7 @@ class Event(Base):
     participations = relationship(
         "Participation",
         primaryjoin="Event.id == Participation.event_id")
-    url = Column(String(2083), default="", nullable=False)
+    url = Column(String(2083), default=None, nullable=True)
 
     @property
     def participant_count(self):
