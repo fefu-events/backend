@@ -1,8 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from backend import crud
 from backend.api.dependencies.database import get_db
-from backend.api.dependencies.user import get_user_azure, user_exist
+from backend.api.dependencies.user import (
+    get_user_azure,
+    get_current_user,
+)
 from backend.schemas.user import (
     UserAzure,
     UserInDBBase,
@@ -18,39 +21,34 @@ router = APIRouter()
     "/",
     name="me:get",
     response_model=UserWithOrganizationsInDBBase,
-    dependencies=[Depends(user_exist)],
 )
 def get_me(
-    request: Request,
+    user: UserWithOrganizationsInDBBase = Depends(get_current_user()),
     db=Depends(get_db),
 ):
-    return request.state.current_user
+    return user
 
 
 @router.put(
     "/",
     name="me:update",
     response_model=UserInDBBase,
-    dependencies=[Depends(user_exist)],
 )
 def update_me(
-    request: Request,
     user_in: UserUpdate,
+    user: UserWithOrganizationsInDBBase = Depends(get_current_user()),
     db=Depends(get_db),
 ):
-    request.state.current_user =\
-        crud.user.update(
-            db, db_obj=request.state.current_user, obj_in=user_in)
-    return request.state.current_user
+    return crud.user.update(db, db_obj=user, obj_in=user_in)
 
 
 @router.post(
     "/",
     name="me:create",
-    status_code=201,
+    status_code=status.HTTP_201_CREATED,
     response_model=UserInDBBase,
 )
-async def register(
+def create_me(
     user_azure: UserAzure = Depends(get_user_azure),
     db=Depends(get_db),
 ):

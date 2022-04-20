@@ -1,12 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from backend import crud
 from backend.api.dependencies.database import get_db
+from backend.api.dependencies.user import (
+    get_user_by_id_from_path
+)
 from backend.schemas.user import (
     UserInDBBase,
     UserWithOrganizationsInDBBase
 )
-from backend.resources import strings
 
 router = APIRouter()
 
@@ -32,13 +34,7 @@ def get_users(
     response_model=UserWithOrganizationsInDBBase,
 )
 def get_user(
-    user_id: int,
+    user: UserInDBBase = Depends(get_user_by_id_from_path),
     db=Depends(get_db),
 ):
-    user = crud.user.get(db, user_id)
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail=strings.USER_DOES_NOT_FOUND_ERROR
-        )
     return user

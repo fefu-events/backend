@@ -1,4 +1,6 @@
-from fastapi import Depends, HTTPException, Request
+from typing import Callable
+
+from fastapi import Depends, HTTPException, Request, Path, status
 
 from fastapi_azure_auth.user import User as UserAzureLib
 
@@ -10,7 +12,7 @@ from backend.schemas.azure import (
     azure_scheme,
     azure_scheme_without_error
 )
-from backend.schemas.user import UserAzure
+from backend.schemas.user import UserAzure, UserInDBBase
 from backend.resources import strings
 
 
@@ -57,3 +59,46 @@ def user_exist_without_error(
     if user_azure:
         user = crud.user.get_by_email(db, user_azure.email)
     request.state.current_user = user
+
+
+def _get_current_user(
+    user_azure: UserAzure = Depends(get_user_azure),
+    db: Session = Depends(get_db),
+) -> UserInDBBase:
+    if user_azure:
+        user = crud.user.get_by_email(db, user_azure.email)
+        if user:
+            return user
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail=strings.USER_DOES_NOT_EXIST_ERROR
+    )
+
+
+def _get_current_user_optional(
+    user_azure: UserAzure = Depends(get_user_azure_without_error),
+    db: Session = Depends(get_db),
+) -> UserInDBBase:
+    if user_azure:
+        return crud.user.get_by_email(db, user_azure.email)
+    return None
+
+
+def get_current_user(
+    *,
+    required: bool = True
+) -> Callable:
+    return _get_current_user if required else _get_current_user_optional
+
+
+def get_user_by_id_from_path(
+    user_id: int = Path(..., ge=1),
+    db=Depends(get_db)
+) -> UserInDBBase:
+    user = crud.user.get(db, id=user_id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=strings.USER_DOES_NOT_FOUND_ERROR
+        )
+    return user
