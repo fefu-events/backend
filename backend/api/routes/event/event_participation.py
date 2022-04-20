@@ -23,7 +23,6 @@ router = APIRouter()
     '/{event_id}/participant',
     name="event:create_participant",
     response_model=ParticipationInDBBase,
-    tags=["participant"],
 )
 def create_participant(
     event: EventInDBBase = Depends(get_event_by_id_from_path),
@@ -47,7 +46,6 @@ def create_participant(
     '/{event_id}/participant',
     name="event:delete_participant",
     response_model=Message,
-    tags=["participant"],
 )
 def delete_participant(
     request: Request,
