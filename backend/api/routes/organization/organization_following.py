@@ -2,11 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from backend import crud
 from backend.api.dependencies.database import get_db
-from backend.api.dependencies.user import user_exist
+from backend.api.dependencies.user import get_current_user
+from backend.api.dependencies.organization import (
+    get_organization_by_id_from_path
+)
 from backend.schemas.organization_subscription import (
     OrganizationSubscriptionCreate,
     OrganizationSubscriptionInDBBase,
 )
+from backend.schemas.organization import OrganizationInDBBase
+from backend.schemas.user import UserInDBBase
 from backend.schemas.message import Message
 from backend.resources import strings
 
@@ -17,20 +22,16 @@ router = APIRouter()
     '/{organization_id}/follow',
     name="organization:follow_by_id",
     response_model=OrganizationSubscriptionInDBBase,
-    dependencies=[Depends(user_exist)],
     tags=["organization following"],
 )
 def follow_organization(
     request: Request,
     organization_id: int,
     db=Depends(get_db),
+    current_user: UserInDBBase = Depends(get_current_user()),
+    organization: OrganizationInDBBase =
+        Depends(get_organization_by_id_from_path),
 ):
-    organization = crud.organization.get(db, organization_id)
-    if not organization:
-        raise HTTPException(
-            status_code=404,
-            detail=strings.ORGANIZATION_DOES_NOT_FOUND_ERROR
-        )
     create_data = {
         'follower_id': request.state.current_user.id,
         'organization_id': organization_id
@@ -50,20 +51,16 @@ def follow_organization(
     '/{organization_id}/unfollow',
     name="organization:unfollow_by_id",
     response_model=Message,
-    dependencies=[Depends(user_exist)],
     tags=["organization following"],
 )
 def unfollow_organization(
     request: Request,
     organization_id: int,
     db=Depends(get_db),
+    current_user: UserInDBBase = Depends(get_current_user()),
+    organization: OrganizationInDBBase =
+        Depends(get_organization_by_id_from_path),
 ):
-    organization = crud.organization.get(db, organization_id)
-    if not organization:
-        raise HTTPException(
-            status_code=404,
-            detail=strings.ORGANIZATION_DOES_NOT_FOUND_ERROR
-        )
     data = {
         'follower_id': request.state.current_user.id,
         'organization_id': organization_id

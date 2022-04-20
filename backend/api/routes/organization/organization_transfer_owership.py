@@ -2,9 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from backend import crud
 from backend.api.dependencies.database import get_db
-from backend.api.dependencies.user import user_exist
+from backend.api.dependencies.user import get_current_user
+from backend.api.dependencies.organization import (
+    get_organization_by_id_from_path
+)
+from backend.schemas.user import UserInDBBase
 from backend.schemas.organization import (
-    OrganizationTransferOwnership
+    OrganizationInDBBase,
+    OrganizationTransferOwnership,
 )
 from backend.schemas.message import Message
 from backend.resources import strings
@@ -16,26 +21,17 @@ router = APIRouter()
     "/{organization_id}/transfer-ownership",
     name="organization:transfer_ownership",
     response_model=Message,
-    dependencies=[Depends(user_exist)],
-    tags=["organization transfer ownership"],
 )
 def transfer_ownership(
-    request: Request,
-    organization_id: int,
     transwer_ownership_in: OrganizationTransferOwnership,
-    db=Depends(get_db)
+    db=Depends(get_db),
+    current_user: UserInDBBase = Depends(get_current_user()),
+    organization: OrganizationInDBBase =
+        Depends(get_organization_by_id_from_path),
 ):
-    organization = crud.organization.get(db, id=organization_id)
-
-    if not organization:
-        raise HTTPException(
-            status_code=404,
-            detail=strings.ORGANIZATION_DOES_NOT_FOUND_ERROR
-        )
-
     user_organization_1 = crud.user_organization.\
         get_by_user_and_organization(
-            db, user_id=request.state.current_user.id,
+            db, user_id=current_user.id,
             organization_id=organization.id
         )
 
@@ -54,12 +50,8 @@ def transfer_ownership(
             detail=strings.THE_USER_IS_ALREADY_A_MEMBER_OF_THE_ORGANIZATION
         )
 
-    a, b = crud.user_organization.transfer_owner(
-        db,
-        user_organization_1=user_organization_1,
+    crud.user_organization.transfer_owner(
+        db, user_organization_1=user_organization_1,
         user_organization_2=user_organization_2)
-    print(a.is_owner, b.is_owner)
 
-    return Message(
-        detail="OK"
-    )
+    return Message(detail="OK")

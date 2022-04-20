@@ -20,5 +20,5 @@ router.include_router(organization_following.router,
                       tags=["organization following"],
                       prefix="/organization")
 router.include_router(organization_transfer_owership.router,
-                      tags=["organization transfer owership"],
+                      tags=["organization transfer ownership"],
                       prefix="/organization")
