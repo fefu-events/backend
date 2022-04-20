@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 
 from backend import crud
 from backend.api.dependencies.database import get_db
@@ -27,7 +27,6 @@ router = APIRouter(
     dependencies=[Depends(user_exist)],
 )
 def follow_user(
-    request: Request,
     current_user: UserInDBBase = Depends(get_current_user()),
     user: UserInDBBase = Depends(get_user_by_id_from_path),
     db=Depends(get_db),
@@ -56,7 +55,6 @@ def follow_user(
     '/{user_id}/unfollow',
     name="user:unfollow_by_id",
     response_model=Message,
-    dependencies=[Depends(user_exist)],
 )
 def unfollow_user(
     user_id: int,
@@ -82,7 +80,6 @@ def unfollow_user(
     response_model=list[UserInDBBase],
 )
 def get_followers(
-    request: Request,
     user_id: int,
     db=Depends(get_db),
 ):
@@ -95,7 +92,6 @@ def get_followers(
     response_model=list[UserInDBBase],
 )
 def get_following(
-    request: Request,
     user_id: int,
     db=Depends(get_db),
 ):
