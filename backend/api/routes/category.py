@@ -3,15 +3,12 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, Request, Query, HTTPException
 
 from backend import crud
-from backend.routers.dependencies import get_db
+from backend.api.dependencies.database import get_db
 from backend.schemas.place import PlaceForMapInDBBase
 from backend.utils import prepare_search_input
 from backend.resources import strings
 
-router = APIRouter(
-    prefix="/map",
-    tags=["map"],
-)
+router = APIRouter()
 
 
 @router.get(

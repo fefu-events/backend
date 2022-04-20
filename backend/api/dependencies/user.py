@@ -1,23 +1,17 @@
-from typing import Generator
-
 from fastapi import Depends, HTTPException, Request
+
 from fastapi_azure_auth.user import User as UserAzureLib
+
 from sqlalchemy.orm import Session
 
 from backend import crud
-from backend.database.session import SessionLocal
-from backend.resources import strings
-from backend.routers.authentication import azure_scheme,\
+from backend.api.dependencies.database import get_db
+from backend.schemas.azure import (
+    azure_scheme,
     azure_scheme_without_error
+)
 from backend.schemas.user import UserAzure
-
-
-def get_db() -> Generator:
-    try:
-        db = SessionLocal()
-        yield db
-    finally:
-        db.close()
+from backend.resources import strings
 
 
 def get_user_azure(

@@ -1,13 +1,11 @@
 from fastapi import APIRouter, Depends, Request
 
 from backend import crud
-from backend.routers.dependencies import get_db, get_user_azure
+from backend.api.dependencies.database import get_db
+from backend.api.dependencies.user import get_user_azure
 from backend.schemas.user import CurrentUserExist, UserAzure
 
-router = APIRouter(
-    prefix="/current-user-exist",
-    tags=["current-user-exist"],
-)
+router = APIRouter()
 
 
 @router.get(

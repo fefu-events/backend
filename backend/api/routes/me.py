@@ -1,15 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 
 from backend import crud
-from backend.resources import strings
-from backend.routers.dependencies import get_db, get_user_azure, user_exist
-from backend.schemas.user import UserAzure, UserInDBBase,\
-    UserWithOrganizationsInDBBase, UserUpdate
-
-router = APIRouter(
-    prefix="/me",
-    tags=["me"],
+from backend.api.dependencies.database import get_db
+from backend.api.dependencies.user import get_user_azure, user_exist
+from backend.schemas.user import (
+    UserAzure,
+    UserInDBBase,
+    UserWithOrganizationsInDBBase,
+    UserUpdate,
 )
+from backend.resources import strings
+
+router = APIRouter()
 
 
 @router.get(
@@ -37,9 +39,8 @@ def update_me(
     db=Depends(get_db),
 ):
     request.state.current_user =\
-        crud.user.update(db,
-                         db_obj=request.state.current_user,
-                         obj_in=user_in)
+        crud.user.update(
+            db, db_obj=request.state.current_user, obj_in=user_in)
     return request.state.current_user
 
 
