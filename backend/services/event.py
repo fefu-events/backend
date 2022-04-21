@@ -14,4 +14,4 @@ def check_user_can_modify_event(
 ) -> bool:
     return user_organization is not None or\
         user.is_admin or user.is_moderator or\
-        event.user_id == user.id
+        (event.user_id == user.id and event.organization_id is None)
