@@ -5,7 +5,8 @@ from backend.api.routes import (
     me,
     place,
     category,
-    map
+    map,
+    image
 )
 from backend.api.routes.user import api as user
 from backend.api.routes.organization import api as organization
@@ -46,4 +47,9 @@ router.include_router(
     map.router,
     prefix="/map",
     tags=["map"],
+)
+router.include_router(
+    image.router,
+    prefix="/image",
+    tags=["image"],
 )
