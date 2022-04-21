@@ -20,7 +20,10 @@ from backend.schemas.event import (
     EventUpdate,
     EventWithAmIParticipationInDBBase,
 )
-from backend.services.event import check_user_can_modify_event
+from backend.services.event import (
+    check_user_can_create_event_by_organization,
+    check_user_can_modify_event
+)
 from backend.schemas.message import Message
 from backend.utils import prepare_search_input
 from backend.resources import strings
@@ -50,15 +53,16 @@ def create_event(
             status_code=422,
             detail=strings.CATEGORY_DOES_NOT_EXIST
         )
-    if not check_user_can_modify_event(
-        crud.user_organization.get_by_user_and_organization(
-            db, user_id=current_user.id,
-            organization_id=event_in.organization_id)
-    ):
-        raise HTTPException(
-            status_code=403,
-            detail=strings.CANNOT_MODIFY_ORGANIZATION
-        )
+    if event_in.organization_id:
+        if not check_user_can_create_event_by_organization(
+            crud.user_organization.get_by_user_and_organization(
+                db, user_id=current_user.id,
+                organization_id=event_in.organization_id)
+        ):
+            raise HTTPException(
+                status_code=403,
+                detail=strings.CANNOT_MODIFY_ORGANIZATION
+            )
     return crud.event.create_with_user(
         db, obj_in=event_in, user_id=current_user.id)
 
