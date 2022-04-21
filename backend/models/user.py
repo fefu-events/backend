@@ -25,3 +25,4 @@ class User(Base):
         'Organization', lazy="select", secondary="userorganization",
         backref='User',
         viewonly=True)
+    image_uuid4 = Column(String(36), default=None, nullable=True)
