@@ -42,6 +42,11 @@ class AppSettings(BaseAppSettings):
     app_client_id: str
     tenant_id: str
 
+    dropbox_access_token: str
+    dropbox_app_key: str
+    dropbox_secret: str
+    dropbox_refresh_token: str
+
     class Config:
         validate_assigment = True
 
@@ -59,6 +64,15 @@ class AppSettings(BaseAppSettings):
                 'usePkceWithAuthorizationCodeGrant': True,
                 'clientId': self.openapi_client_id,
             },
+        }
+
+    @property
+    def dropbox_kwargs(self) -> dict[str, any]:
+        return {
+            "oauth2_access_token": self.dropbox_access_token,
+            "app_key": self.dropbox_app_key,
+            "app_secret": self.dropbox_secret,
+            "oauth2_refresh_token": self.dropbox_refresh_token
         }
 
     def configure_logging(self) -> None:
