@@ -10,6 +10,10 @@ class OrganizationCreate(OrganizationBase):
     pass
 
 
+class OrganizationCreateWithMembers(OrganizationBase):
+    members_ids: list[int]
+
+
 class OrganizationUpdate(OrganizationCreate):
     pass
 

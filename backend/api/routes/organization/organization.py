@@ -8,6 +8,7 @@ from backend.api.dependencies.organization import (
 )
 from backend.schemas.organization import (
     OrganizationCreate,
+    OrganizationCreateWithMembers,
     OrganizationUpdate,
     OrganizationInDBBase,
 )
@@ -58,12 +59,22 @@ def get_organization_by_id(
     tags=["organization"],
 )
 def create_organization(
-    organization_in: OrganizationCreate,
+    organization_in: OrganizationCreateWithMembers,
     current_user: UserInDBBase = Depends(get_current_user()),
     db=Depends(get_db),
 ):
+    for member_id in organization_in.members_ids:
+        user = crud.user.get(db, member_id)
+        if not user:
+            raise HTTPException(
+                status_code=409,
+                detail=strings.USER_DOES_NOT_EXIST,
+            )
+
     return crud.organization.create_with_user(
-        db, obj_in=organization_in, user_id=current_user.id)
+        db, obj_in=organization_in,
+        user_id=current_user.id
+    )
 
 
 @router.put(

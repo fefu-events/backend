@@ -7,7 +7,7 @@ from backend.crud.user_organization import user_organization as\
 from backend.models.organization import Organization
 from backend.models.user_organization import UserOrganization
 from backend.schemas.organization import OrganizationCreate,\
-    OrganizationUpdate
+    OrganizationUpdate, OrganizationCreateWithMembers
 from backend.schemas.user_organization import\
     UserOrganizationCreateWithIsOwner
 
@@ -17,10 +17,21 @@ class CRUDOrganization(
 ):
 
     def create_with_user(
-        self, db: Session, *, obj_in: OrganizationCreate,
+        self, db: Session, *, obj_in: OrganizationCreateWithMembers,
         user_id: int
     ) -> Organization:
-        organization = self.create(db, obj_in=obj_in)
+        organization = self.create(
+            db, obj_in=OrganizationCreate(
+                **obj_in.dict(exclude={"members_ids"})
+            )
+        )
+        for member_id in obj_in.members_ids:
+            crud_user_organization.create(
+                db, obj_in=UserOrganizationCreateWithIsOwner(
+                    user_id=member_id,
+                    organization_id=organization.id,
+                    is_owner=False
+                ))
         crud_user_organization.create(
             db, obj_in=UserOrganizationCreateWithIsOwner(
                 user_id=user_id,
