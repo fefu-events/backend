@@ -31,7 +31,6 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             limit(limit).\
             all()
 
-
     def get_followers(self, db: Session, user_id) -> list[User]:
         return db.query(User).\
             join(UserSubscription,
@@ -43,6 +42,13 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             join(UserSubscription,
                  User.id == UserSubscription.user_id).\
             filter(UserSubscription.follower_id == user_id).all()
+
+    def set_image(self, db: Session, user: User, image_uuid4: str):
+        user.image_uuid4 = image_uuid4
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
 
 
 user = CRUDUser(User)
