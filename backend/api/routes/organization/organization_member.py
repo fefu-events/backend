@@ -79,7 +79,10 @@ def delete_member_of_organization(
             detail=strings.USER_DOES_NOT_EXIST
         )
 
-    if organization.owner_id != current_user.id:
+    if (
+        organization.owner_id != current_user.id and
+        user_organization_in.user_id != current_user.id
+    ):
         raise HTTPException(
             status_code=403,
             detail=strings.CANNOT_MODIFY_ORGANIZATION
