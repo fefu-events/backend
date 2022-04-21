@@ -43,11 +43,13 @@ def create_event(
     if not crud.place.get(db, id=event_in.place_id):
         raise HTTPException(
             status_code=422,
-            detail=strings.PLACE_DOES_NOT_EXIST_ERROR)
+            detail=strings.PLACE_DOES_NOT_EXIST
+        )
     if not crud.category.get(db, id=event_in.category_id):
         raise HTTPException(
             status_code=422,
-            detail=strings.CATEGORY_DOES_NOT_EXIST_ERROR)
+            detail=strings.CATEGORY_DOES_NOT_EXIST
+        )
     if not check_user_can_modify_event(
         crud.user_organization.get_by_user_and_organization(
             db, user_id=current_user.id,
@@ -55,7 +57,7 @@ def create_event(
     ):
         raise HTTPException(
             status_code=403,
-            detail=strings.NOT_HAVE_PERMISSION_TO_POST_BY_THIS_ORGANIZATION
+            detail=strings.CANNOT_MODIFY_ORGANIZATION
         )
     return crud.event.create_with_user(
         db, obj_in=event_in, user_id=current_user.id)
@@ -81,7 +83,7 @@ def update_event(
     ):
         raise HTTPException(
             status_code=403,
-            detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR
+            detail=strings.CANNOT_MODIFY_ORGANIZATION
         )
     return crud.event.update(db=db, db_obj=event, obj_in=event_in)
 
@@ -106,7 +108,7 @@ def delete_event(
     ):
         raise HTTPException(
             status_code=403,
-            detail=strings.EVENT_DOES_NOT_HAVE_RIGHT_TO_DELETE_ERROR
+            detail=strings.CANNOT_MODIFY_ORGANIZATION
         )
     crud.event.remove(db=db, id=event_id)
     return Message(detail=strings.EVENT_HAS_BEEN_DELETED)
@@ -163,7 +165,7 @@ def get_events(
         if not user:
             raise HTTPException(
                 status_code=409,
-                detail=strings.USER_DOES_NOT_EXIST_ERROR
+                detail=strings.USER_DOES_NOT_EXIST
             )
     events = crud.event.get_multi_with_filter(
         db, skip=skip, limit=limit, title=title,

@@ -14,6 +14,6 @@ def get_organization_by_id_from_path(
     if not organization:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=strings.ORGANIZATION_DOES_NOT_FOUND_ERROR,
+            detail=strings.ORGANIZATIION_DOES_NOT_EXIST
         )
     return organization

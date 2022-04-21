@@ -85,7 +85,7 @@ def update_organization(
             organization_id=organization.id)):
         raise HTTPException(
             status_code=403,
-            detail=strings.NOT_HAVE_PERMISSION_TO_UPDATE_THIS_ORGANIZATION
+            detail=strings.CANNOT_MODIFY_ORGANIZATION
         )
     return crud.organization.update(
         db, db_obj=organization, obj_in=organization_in)
@@ -109,9 +109,7 @@ def delete_organization(
             organization_id=organization.id)):
         raise HTTPException(
             status_code=403,
-            detail=strings.NOT_HAVE_PERMISSION_TO_UPDATE_THIS_ORGANIZATION
+            detail=strings.CANNOT_MODIFY_ORGANIZATION
         )
     crud.organization.remove(db, id=organization.id)
-    return Message(
-        detail=strings.ORGANIZATION_HAS_BEEN_DELETED
-    )
+    return Message(detail=strings.ORGANIZATION_HAS_BEEN_DELETED)

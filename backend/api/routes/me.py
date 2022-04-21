@@ -56,6 +56,6 @@ def create_me(
     if user:
         raise HTTPException(
             status_code=409,
-            detail=strings.USER_WITH_THIS_EMAIL_ALREADY_EXIST_ERROR
+            detail=strings.EMAIL_TAKEN
         )
     return crud.user.create(db, obj_in=user_azure)

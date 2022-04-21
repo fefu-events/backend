@@ -34,7 +34,7 @@ def follow_user(
     if user.id == current_user.id:
         raise HTTPException(
             status_code=400,
-            detail=strings.CAN_NOT_SUBSCRIBE_TO_YOURSELF,
+            detail=strings.UNABLE_TO_FOLLOW_YOURSELF,
         )
     create_data = {
         'user_id': user.id,
@@ -45,7 +45,7 @@ def follow_user(
     if user_subscription:
         raise HTTPException(
             status_code=409,
-            detail=strings.HAVE_ALREADY_SUBSCRIBED_TO_THIS_USER_ERROR,
+            detail=strings.USER_IS_ALREADY_FOLLOWED
         )
     return crud.user_subscription.create(
         db, obj_in=UserSubscriptionCreate(**create_data))
@@ -68,10 +68,10 @@ def unfollow_user(
     if not user_subscription:
         raise HTTPException(
             status_code=409,
-            detail=strings.ARE_NOT_FOLLOWING_THIS_USER,
+            detail=strings.USER_IS_NOT_FOLLOWED
         )
     crud.user_subscription.remove(db, id=user_subscription.id)
-    return Message(detail=strings.ARE_NOT_FOLLOWING_THIS_USER)
+    return Message(detail=strings.USER_IS_NOT_FOLLOWED)
 
 
 @router.get(

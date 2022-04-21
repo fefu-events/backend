@@ -39,7 +39,7 @@ def transfer_ownership(
     if not check_user_can_modify_organization(user_organization_1):
         raise HTTPException(
             status_code=403,
-            detail=strings.DO_NOT_HAVE_RIGHTS_TO_ADD_A_NEW_USER_TO_THE_ORGANIZATION
+            detail=strings.CANNOT_MODIFY_ORGANIZATION
         )
 
     user_organization_2 = crud.user_organization.get_by_user_and_organization(
@@ -48,11 +48,11 @@ def transfer_ownership(
     if not user_organization_2:
         raise HTTPException(
             status_code=403,
-            detail=strings.THE_USER_IS_ALREADY_A_MEMBER_OF_THE_ORGANIZATION
+            detail=strings.USER_IS_NOT_MEMBER_ORGANIZATION
         )
 
     crud.user_organization.transfer_owner(
         db, user_organization_1=user_organization_1,
         user_organization_2=user_organization_2)
 
-    return Message(detail="OK")
+    return Message(detail=strings.YOU_TRANSFERRED_THE_RIGHTS)

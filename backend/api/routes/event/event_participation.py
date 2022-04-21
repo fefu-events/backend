@@ -35,7 +35,7 @@ def create_participant(
     if participation:
         raise HTTPException(
             status_code=409,
-            detail=strings.ARE_ALREADY_PARTICIPATING_IN_THE_EVENT_ERROR
+            detail=strings.USER_IS_ALREADY_PARTICIPATED
         )
 
     return crud.participation.create_with_user(
@@ -59,9 +59,8 @@ def delete_participant(
     if not participation:
         raise HTTPException(
             status_code=409,
-            detail=strings.PARTICIPATION_DOES_NOT_EXIST_ERROR
+            detail=strings.USER_IS_NOT_PARTICIPATING
         )
 
-    crud.participation.remove(
-        db, id=participation.id)
-    return Message(detail=strings.ARE_NOT_PARTICIPATING)
+    crud.participation.remove(db, id=participation.id)
+    return Message(detail=strings.USER_IS_NOT_PARTICIPATING)

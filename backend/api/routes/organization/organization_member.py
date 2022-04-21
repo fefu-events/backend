@@ -35,13 +35,13 @@ def create_member_of_organization(
     if not crud.user.get(db, id=user_id):
         raise HTTPException(
             status_code=409,
-            detail=strings.USER_DOES_NOT_EXIST_ERROR
+            detail=strings.USER_DOES_NOT_EXIST
         )
 
     if organization.owner_id != current_user.id:
         raise HTTPException(
             status_code=403,
-            detail=strings.DO_NOT_HAVE_RIGHTS_TO_ADD_A_NEW_USER_TO_THE_ORGANIZATION
+            detail=strings.CANNOT_MODIFY_ORGANIZATION
         )
 
     if crud.user_organization.get_by_user_and_organization(
@@ -49,7 +49,7 @@ def create_member_of_organization(
     ):
         raise HTTPException(
             status_code=403,
-            detail=strings.THE_USER_IS_ALREADY_A_MEMBER_OF_THE_ORGANIZATION
+            detail=strings.USER_IS_ALREADY_MEMBER_ORGANIZATION
         )
 
     return crud.user_organization.create(
@@ -76,13 +76,13 @@ def delete_member_of_organization(
     if not crud.user.get(db, id=user_organization_in.user_id):
         raise HTTPException(
             status_code=409,
-            detail=strings.USER_DOES_NOT_EXIST_ERROR
+            detail=strings.USER_DOES_NOT_EXIST
         )
 
     if organization.owner_id != current_user.id:
         raise HTTPException(
             status_code=403,
-            detail=strings.DO_NOT_HAVE_RIGHTS_TO_ADD_A_NEW_USER_TO_THE_ORGANIZATION
+            detail=strings.CANNOT_MODIFY_ORGANIZATION
         )
 
     user_organization_2 = crud.user_organization.\
@@ -93,14 +93,16 @@ def delete_member_of_organization(
     if not user_organization_2:
         raise HTTPException(
             status_code=409,
-            detail=strings.THE_USER_IS_NOT_A_MEMBER_OF_THE_ORGANIZATION
+            detail=strings.USER_IS_NOT_MEMBER_ORGANIZATION
         )
 
-    if organization.owner_id == current_user.id and\
-            user_organization_in.user_id == current_user.id:
+    if (
+        organization.owner_id == current_user.id and
+        user_organization_in.user_id == current_user.id
+    ):
         raise HTTPException(
             status_code=400,
-            detail=strings.CANNOT_REMOVE_YOURSELF_FROM_AN_ORGANIZATION_WHEN_NO_MORE_OWNERS
+            detail=strings.OWNER_CANNOT_REMOVE_HIMSELF
         )
 
     return crud.user_organization.remove(db, id=user_organization_2.id)

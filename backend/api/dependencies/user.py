@@ -99,6 +99,6 @@ def get_user_by_id_from_path(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=strings.USER_DOES_NOT_FOUND_ERROR
+            detail=strings.USER_DOES_NOT_EXIST
         )
     return user

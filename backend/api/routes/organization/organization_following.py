@@ -41,7 +41,7 @@ def follow_organization(
     if organization_subscription:
         raise HTTPException(
             status_code=409,
-            detail=strings.HAVE_ALREADY_SUBSCRIBED_TO_THIS_ORGANIZATION_ERROR
+            detail=strings.ORGANIZATION_IS_ALREADY_FOLLOWED
         )
     return crud.organization_subscription.create(
         db, obj_in=OrganizationSubscriptionCreate(**create_data))
@@ -70,10 +70,9 @@ def unfollow_organization(
     if not organization_subscription:
         raise HTTPException(
             status_code=409,
-            detail=strings.ARE_NOT_FOLLOWING_THIS_ORGANIZATION
+            detail=strings.ORGANIZATION_IS_NOT_FOLLOWED
         )
     crud.organization_subscription.remove(
         db, id=organization_subscription.id)
 
-    return Message(
-        detail=strings.ARE_NOT_FOLLOWING_THIS_ORGANIZATION)
+    return Message(detail=strings.ORGANIZATION_IS_NOT_FOLLOWED)

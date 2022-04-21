@@ -14,6 +14,6 @@ def get_event_by_id_from_path(
     if not event:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=strings.EVENT_DOES_NOT_EXIST_ERROR,
+            detail=strings.EVENT_DOES_NOT_EXIST
         )
     return event

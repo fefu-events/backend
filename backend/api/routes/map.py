@@ -42,7 +42,7 @@ def get_me(
         if not user:
             raise HTTPException(
                 status_code=409,
-                detail=strings.USER_DOES_NOT_EXIST_ERROR
+                detail=strings.USER_DOES_NOT_EXIST
             )
     return crud.place.get_for_map(
         db, title=title,
