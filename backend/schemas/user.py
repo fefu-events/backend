@@ -30,6 +30,7 @@ class UserUpdate(BaseModel):
 
 class UserInDBBase(UserBase):
     id: int
+    image_uuid4: str | None
 
     class Config:
         orm_mode = True
