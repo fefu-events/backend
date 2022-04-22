@@ -60,5 +60,14 @@ class CRUDOrganization(
             filter(self.model.id == id).\
             first()
 
+    def verify(
+        self, db: Session, value: bool = True, *, db_obj: Organization
+    ) -> Organization:
+        db_obj.is_verified = value
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
 
 organization = CRUDOrganization(Organization)

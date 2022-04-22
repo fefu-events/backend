@@ -4,7 +4,8 @@ from backend.api.routes.organization import (
     organization,
     organization_member,
     organization_following,
-    organization_transfer_owership
+    organization_transfer_owership,
+    organization_verify
 )
 
 
@@ -21,4 +22,7 @@ router.include_router(organization_following.router,
                       prefix="/organization")
 router.include_router(organization_transfer_owership.router,
                       tags=["organization transfer ownership"],
+                      prefix="/organization")
+router.include_router(organization_verify.router,
+                      tags=["organization verify"],
                       prefix="/organization")
