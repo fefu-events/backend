@@ -83,7 +83,8 @@ def update_event(
         current_user,
         event,
         crud.user_organization.get_by_user_and_organization(
-            db, user_id=current_user.id, organization_id=event.organization.id)
+            db, user_id=current_user.id, organization_id=event.organization.id
+        ) if event.organization else None
     ):
         raise HTTPException(
             status_code=403,
@@ -108,7 +109,8 @@ def delete_event(
         current_user,
         event,
         crud.user_organization.get_by_user_and_organization(
-            db, user_id=current_user.id, organization_id=event.organization.id)
+            db, user_id=current_user.id, organization_id=event.organization.id
+        ) if event.organization else None
     ):
         raise HTTPException(
             status_code=403,
