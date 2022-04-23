@@ -25,7 +25,7 @@ def encode_query_params(params: dict[str, any]) -> str:
 
 
 def prepare_search_input(title: str):
-    pattern = "#\w{1,}"
+    pattern = "#\\w{1,}"
     tags = [x.group()[1:] for x in re.finditer(pattern, title)]
     title = re.sub(pattern, "", title).strip()
     return title, tags
