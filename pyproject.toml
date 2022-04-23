@@ -25,6 +25,7 @@ python-lsp-server = {extras = ["all"], version = "^1.4.1"}
 isort = "^5.10.1"
 pytest = "^7.1.1"
 requests = "^2.27.1"
+pytest-cases = "^3.6.11"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
