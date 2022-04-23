@@ -11,6 +11,11 @@ class UserAzure(BaseModel):
     name: str
     email: str
 
+    def get_test_headers(self) -> dict[str, str]:
+        return {
+            "authoriozation": f"{self.name}:{self.email}"
+        }
+
 
 class UserBase(BaseModel):
     name: str
