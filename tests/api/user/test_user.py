@@ -3,6 +3,7 @@ import pytest
 from pytest_cases import parametrize_with_cases, parametrize
 
 from backend.schemas.user import UserAzure, UserInDBBase
+from backend.resources import strings
 
 from tests.utils import get_ids_ordered
 
@@ -59,3 +60,9 @@ def test_user_by_id(users, i_user, client_app):
     assert data['name'] == users[i_user].name
     assert data['email'] == users[i_user].email
     assert data['tags'] == users[i_user].tags
+
+
+def test_user_by_id_404(users, client_app):
+    response = client_app.get(f"/user/10/")
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()['detail'] == strings.USER_DOES_NOT_EXIST
