@@ -2,7 +2,6 @@ import string
 import random
 from datetime import datetime, timezone
 
-from dateutil import tz
 from dateutil.relativedelta import relativedelta
 
 from backend.schemas.user import UserAzure
@@ -42,7 +41,9 @@ def get_random_category() -> CategoryCreate:
 
 
 def get_ids_ordered(items):
-    result = [item.id for item in items]
+    result = [
+        item["id"] if isinstance(item, dict) else item.id for item in items
+    ]
     result.sort()
     return result
 

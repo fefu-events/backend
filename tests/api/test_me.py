@@ -4,6 +4,7 @@ from backend.resources import strings
 
 from tests.utils import get_random_user
 
+
 def test_post_me_normal(client_app):
     user = get_random_user()
     response = client_app.post("/me/", headers=user.get_test_headers())
