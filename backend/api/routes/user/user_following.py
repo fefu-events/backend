@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from backend import crud
 from backend.api.dependencies.database import get_db
@@ -33,7 +33,7 @@ def follow_user(
 ):
     if user.id == current_user.id:
         raise HTTPException(
-            status_code=400,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail=strings.UNABLE_TO_FOLLOW_YOURSELF,
         )
     create_data = {
@@ -44,7 +44,7 @@ def follow_user(
         db, **create_data)
     if user_subscription:
         raise HTTPException(
-            status_code=409,
+            status_code=status.HTTP_409_CONFLICT,
             detail=strings.USER_IS_ALREADY_FOLLOWED
         )
     return crud.user_subscription.create(
@@ -67,7 +67,7 @@ def unfollow_user(
     )
     if not user_subscription:
         raise HTTPException(
-            status_code=409,
+            status_code=status.HTTP_409_CONFLICT,
             detail=strings.USER_IS_NOT_FOLLOWED
         )
     crud.user_subscription.remove(db, id=user_subscription.id)
