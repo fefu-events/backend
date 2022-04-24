@@ -25,7 +25,6 @@ router = APIRouter()
     tags=["organization following"],
 )
 def follow_organization(
-    request: Request,
     organization_id: int,
     db=Depends(get_db),
     current_user: UserInDBBase = Depends(get_current_user()),
@@ -33,7 +32,7 @@ def follow_organization(
         Depends(get_organization_by_id_from_path),
 ):
     create_data = {
-        'follower_id': request.state.current_user.id,
+        'follower_id': current_user.id,
         'organization_id': organization_id
     }
     organization_subscription = crud.organization_subscription.\
@@ -54,7 +53,6 @@ def follow_organization(
     tags=["organization following"],
 )
 def unfollow_organization(
-    request: Request,
     organization_id: int,
     db=Depends(get_db),
     current_user: UserInDBBase = Depends(get_current_user()),
@@ -62,7 +60,7 @@ def unfollow_organization(
         Depends(get_organization_by_id_from_path),
 ):
     data = {
-        'follower_id': request.state.current_user.id,
+        'follower_id': current_user.id,
         'organization_id': organization_id
     }
     organization_subscription = crud.organization_subscription.\
