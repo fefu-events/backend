@@ -24,6 +24,11 @@ class UserBase(BaseModel):
     is_moderator: bool
     tags: list[str]
 
+    def get_test_headers(self) -> dict[str, str]:
+        return {
+            "authoriozation": f"{self.name}:{self.email}"
+        }
+
 
 class UserCreate(BaseModel):
     pass
