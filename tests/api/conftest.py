@@ -3,7 +3,7 @@ import pytest
 from fastapi import Header
 from fastapi.testclient import TestClient
 
-from backend.schemas.user import UserAzure
+from backend.schemas.user import UserAzure, UserInDBBase
 from backend.api.dependencies.user import (
     get_user_azure,
     get_current_user
@@ -33,3 +33,18 @@ def client_app():
     )
 
     yield client
+
+
+@pytest.fixture
+def users(client_app) -> list[UserInDBBase]:
+    users = [
+        UserAzure(name="Andrey", email="andrey.va@yandex.ru"),
+        UserAzure(name="Tom", email="cruise@gmail.com"),
+        UserAzure(name="Jack", email="trololololo@gmail.com")
+    ]
+    return [
+        UserInDBBase(
+            **client_app.post("/me/", headers=user.get_test_headers()).json()
+        )
+        for user in users
+    ]
