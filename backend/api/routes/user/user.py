@@ -21,7 +21,7 @@ router = APIRouter()
 def get_users(
     skip: int = 0,
     limit: int = 100,
-    search_query: str = None,
+    search_query: str | None = None,
     db=Depends(get_db),
 ):
     return crud.user.get_multi_by_email_or_name(
@@ -35,6 +35,5 @@ def get_users(
 )
 def get_user(
     user: UserInDBBase = Depends(get_user_by_id_from_path),
-    db=Depends(get_db),
 ):
     return user

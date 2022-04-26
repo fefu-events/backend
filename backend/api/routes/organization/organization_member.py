@@ -108,4 +108,5 @@ def delete_member_of_organization(
             detail=strings.OWNER_CANNOT_REMOVE_HIMSELF
         )
 
-    return crud.user_organization.remove(db, id=user_organization_2.id)
+    return crud.user_organization.remove(
+        db, id=user_organization_2.id) # type: ignore

@@ -23,7 +23,7 @@ class CRUDBase(
         """
         self.model = model
 
-    def get(self, db: Session, id: any) -> ModelType | None:
+    def get(self, db: Session, id: int) -> ModelType | None:
         return db.query(self.model).\
             filter(self.model.id == id).first()
 

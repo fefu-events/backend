@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 
 from backend import crud
 from backend.api.dependencies.database import get_db
@@ -14,7 +14,6 @@ router = APIRouter()
     response_model=CurrentUserExist,
 )
 def get_me(
-    request: Request,
     user_azure: UserAzure = Depends(get_user_azure),
     db=Depends(get_db),
 ):

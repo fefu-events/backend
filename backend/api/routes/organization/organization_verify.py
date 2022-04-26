@@ -6,6 +6,7 @@ from backend.api.dependencies.user import get_current_user
 from backend.api.dependencies.organization import (
     get_organization_by_id_from_path
 )
+from backend.models.organization import Organization
 from backend.schemas.user import UserInDBBase
 from backend.schemas.organization import (
     OrganizationInDBBase,
@@ -23,7 +24,7 @@ router = APIRouter()
 def verify_organization(
     db=Depends(get_db),
     current_user: UserInDBBase = Depends(get_current_user()),
-    organization: OrganizationInDBBase =
+    organization: Organization =
         Depends(get_organization_by_id_from_path),
 ):
     if not current_user.is_admin:
@@ -44,7 +45,7 @@ def verify_organization(
 def unverify_organization(
     db=Depends(get_db),
     current_user: UserInDBBase = Depends(get_current_user()),
-    organization: OrganizationInDBBase =
+    organization: Organization =
         Depends(get_organization_by_id_from_path),
 ):
     if not current_user.is_admin:

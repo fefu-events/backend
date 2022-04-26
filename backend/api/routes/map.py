@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, Request, Query, HTTPException
+from fastapi import APIRouter, Depends, Query, HTTPException
 
 from backend import crud
 from backend.api.dependencies.database import get_db
@@ -17,18 +17,17 @@ router = APIRouter()
     response_model=list[PlaceForMapInDBBase],
 )
 def get_me(
-    request: Request,
     skip: int = 0,
     limit: int = 100,
-    title: str = None,
-    date_begin: datetime = None,
-    date_end: datetime = None,
+    title: str | None = None,
+    date_begin: datetime | None = None,
+    date_end: datetime | None = None,
     tags: list[str] = Query(None, alias="tags[]"),
-    user_id: int = None,
-    organization_id: int = None,
+    user_id: int | None = None,
+    organization_id: int | None = None,
     category_ids: list[int] = Query(None, alias="category_ids[]"),
     place_ids: list[int] = Query(None, alias="place_ids[]"),
-    for_user_id: int = None,
+    for_user_id: int | None = None,
     subscriptions: bool = False,
     personalize_tags: bool = False,
     db=Depends(get_db),

@@ -25,9 +25,9 @@ class CRUDUserOrganization(
         self, db: Session,
         user_organization_1: UserOrganization,
         user_organization_2: UserOrganization
-    ) -> (UserOrganization, UserOrganization):
-        user_organization_1.is_owner = False
-        user_organization_2.is_owner = True
+    ) -> (UserOrganization, UserOrganization): # type: ignore
+        user_organization_1.is_owner = False # type: ignore
+        user_organization_2.is_owner = True # type: ignore
         db.add(user_organization_1)
         db.add(user_organization_2)
         db.commit()

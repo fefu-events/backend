@@ -1,5 +1,5 @@
 from fastapi import (
-    APIRouter, Depends, HTTPException, Request,
+    APIRouter, Depends, HTTPException
 )
 
 from backend import crud
@@ -35,7 +35,7 @@ def create_participant(
     if participation:
         raise HTTPException(
             status_code=409,
-            detail=strings.USER_IS_ALREADY_PARTICIPATED
+            detail=strings.USER_IS_ALREADY_PARTICIPATING
         )
 
     return crud.participation.create_with_user(
@@ -48,7 +48,6 @@ def create_participant(
     response_model=Message,
 )
 def delete_participant(
-    request: Request,
     event: EventInDBBase = Depends(get_event_by_id_from_path),
     current_user: UserInDBBase = Depends(get_current_user()),
     db=Depends(get_db),
@@ -62,5 +61,5 @@ def delete_participant(
             detail=strings.USER_IS_NOT_PARTICIPATING
         )
 
-    crud.participation.remove(db, id=participation.id)
+    crud.participation.remove(db, id=participation.id) # type: ignore
     return Message(detail=strings.USER_IS_NOT_PARTICIPATING)

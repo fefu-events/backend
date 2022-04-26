@@ -11,6 +11,7 @@ USER_IS_ALREADY_FOLLOWED = "You follow this user already"
 
 # EVENT
 EVENT_DOES_NOT_EXIST = "The event is not exist"
+EVENT_HAS_BEEN_DELETED = "The event has been deleted"
 
 # EVENT PARTICIPANT
 USER_IS_ALREADY_PARTICIPATING = "The user already participating"

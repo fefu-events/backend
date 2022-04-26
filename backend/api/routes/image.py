@@ -34,5 +34,5 @@ def get_image(
     image_name: str,
     dbx=Depends(dropbox_connect),
 ):
-    metadata, result = dbx.files_download(path=f"/user-images/{image_name}")
+    _, result = dbx.files_download(path=f"/user-images/{image_name}")
     return Response(content=result.content, media_type="image/png")

@@ -27,12 +27,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
 
     def get_multi_with_filter(
         self, db, skip: int, limit: int = 100,
-        title: str = None,
-        date_begin: datetime = None, date_end: datetime = None,
-        user_id: int = None, organization_id: int = None,
-        category_ids: int = None, place_ids: int = None,
-        tags: list[str] = None, user: User = None,
-        subscriptions: bool = True, personalize_tags: bool = True,
+        title: str | None = None,
+        date_begin: datetime | None = None,
+        date_end: datetime | None = None,
+        user_id: int | None = None,
+        organization_id: int | None= None,
+        category_ids: list[int] | None = None,
+        place_ids: list[int] | None= None,
+        tags: list[str] | None = None,
+        user: User | None = None,
+        subscriptions: bool = True,
+        personalize_tags: bool = True,
     ) -> list[Event]:
         query = db.query(self.model).join(Place).join(Category)
 
@@ -77,7 +82,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 Event.place_id.in_(place_ids))
 
         if tags:
-            query = query.filter(Event.tags.contains(tags))
+            query = query.filter(Event.tags.contains(tags)) # type: ignore
 
         if user and personalize_tags:
             query = query.filter(Event.tags.overlap(user.tags))

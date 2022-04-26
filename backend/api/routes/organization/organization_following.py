@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 
 from backend import crud
 from backend.api.dependencies.database import get_db
@@ -6,6 +6,7 @@ from backend.api.dependencies.user import get_current_user
 from backend.api.dependencies.organization import (
     get_organization_by_id_from_path
 )
+from backend.models.organization import Organization
 from backend.schemas.organization_subscription import (
     OrganizationSubscriptionCreate,
     OrganizationSubscriptionInDBBase,
@@ -28,7 +29,7 @@ def follow_organization(
     organization_id: int,
     db=Depends(get_db),
     current_user: UserInDBBase = Depends(get_current_user()),
-    organization: OrganizationInDBBase =
+    _: Organization =
         Depends(get_organization_by_id_from_path),
 ):
     create_data = {
@@ -56,7 +57,7 @@ def unfollow_organization(
     organization_id: int,
     db=Depends(get_db),
     current_user: UserInDBBase = Depends(get_current_user()),
-    organization: OrganizationInDBBase =
+    _: OrganizationInDBBase =
         Depends(get_organization_by_id_from_path),
 ):
     data = {
@@ -71,6 +72,6 @@ def unfollow_organization(
             detail=strings.ORGANIZATION_IS_NOT_FOLLOWED
         )
     crud.organization_subscription.remove(
-        db, id=organization_subscription.id)
+        db, id=organization_subscription.id) # type: ignore
 
     return Message(detail=strings.ORGANIZATION_IS_NOT_FOLLOWED)

@@ -57,7 +57,6 @@ def follow_user(
     response_model=Message,
 )
 def unfollow_user(
-    user_id: int,
     current_user: UserInDBBase = Depends(get_current_user()),
     user: UserInDBBase = Depends(get_user_by_id_from_path),
     db=Depends(get_db),
@@ -70,7 +69,7 @@ def unfollow_user(
             status_code=status.HTTP_409_CONFLICT,
             detail=strings.USER_IS_NOT_FOLLOWED
         )
-    crud.user_subscription.remove(db, id=user_subscription.id)
+    crud.user_subscription.remove(db, id=user_subscription.id) # type: ignore
     return Message(detail=strings.USER_IS_NOT_FOLLOWED)
 
 

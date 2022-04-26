@@ -29,13 +29,13 @@ class CRUDOrganization(
             crud_user_organization.create(
                 db, obj_in=UserOrganizationCreateWithIsOwner(
                     user_id=member_id,
-                    organization_id=organization.id,
+                    organization_id=organization.id, # type: ignore
                     is_owner=False
                 ))
         crud_user_organization.create(
             db, obj_in=UserOrganizationCreateWithIsOwner(
                 user_id=user_id,
-                organization_id=organization.id,
+                organization_id=organization.id, # type: ignore
                 is_owner=True
             ))
 
@@ -53,7 +53,7 @@ class CRUDOrganization(
             count()
 
     def get_by_id_with_members(
-        self, db: Session, id: any
+        self, db: Session, id: int
     ) -> Organization | None:
         return db.query(self.model).\
             join(Organization.members).\
@@ -63,7 +63,7 @@ class CRUDOrganization(
     def verify(
         self, db: Session, value: bool = True, *, db_obj: Organization
     ) -> Organization:
-        db_obj.is_verified = value
+        db_obj.is_verified = value # type: ignore
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)

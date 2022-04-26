@@ -8,6 +8,7 @@ class UserOrganizationBase(BaseModel):
 class UserOrganizationCreate(UserOrganizationBase):
     user_id: int
     organization_id: int
+    is_owner: bool
 
 
 class UserOrganizationUpdate(BaseModel):

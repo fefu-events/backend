@@ -6,6 +6,7 @@ from backend.api.dependencies.user import (
     get_user_azure,
     get_current_user,
 )
+from backend.models.user import User
 from backend.schemas.user import (
     UserAzure,
     UserInDBBase,
@@ -24,7 +25,6 @@ router = APIRouter()
 )
 def get_me(
     user: UserWithOrganizationsInDBBase = Depends(get_current_user()),
-    db=Depends(get_db),
 ):
     return user
 
@@ -36,7 +36,7 @@ def get_me(
 )
 def update_me(
     user_in: UserUpdate,
-    user: UserWithOrganizationsInDBBase = Depends(get_current_user()),
+    user: User = Depends(get_current_user()),
     db=Depends(get_db),
 ):
     return crud.user.update(db, db_obj=user, obj_in=user_in)
@@ -58,4 +58,4 @@ def create_me(
             status_code=409,
             detail=strings.EMAIL_TAKEN
         )
-    return crud.user.create(db, obj_in=user_azure)
+    return crud.user.create(db, obj_in=user_azure) # type: ignore

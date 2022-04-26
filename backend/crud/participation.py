@@ -11,7 +11,7 @@ class CRUDParticipation(
 ):
 
     def get_by_event_and_user(
-        self, db: Session, event_id: int, user_id: int
+        self, db: Session, event_id: int, user_id: int | None
     ) -> Participation | None:
         return db.query(Participation).\
             filter(and_(Participation.event_id == event_id,

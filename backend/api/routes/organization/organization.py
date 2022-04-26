@@ -6,8 +6,8 @@ from backend.api.dependencies.user import get_current_user
 from backend.api.dependencies.organization import (
     get_organization_by_id_from_path
 )
+from backend.models.organization import Organization
 from backend.schemas.organization import (
-    OrganizationCreate,
     OrganizationCreateWithMembers,
     OrganizationUpdate,
     OrganizationInDBBase,
@@ -87,13 +87,12 @@ def update_organization(
     organization_in: OrganizationUpdate,
     db=Depends(get_db),
     current_user: UserInDBBase = Depends(get_current_user()),
-    organization: OrganizationInDBBase =
-        Depends(get_organization_by_id_from_path),
+    organization: Organization = Depends(get_organization_by_id_from_path),
 ):
     if not check_user_can_modify_organization(
         crud.user_organization.get_by_user_and_organization(
             db, user_id=current_user.id,
-            organization_id=organization.id)):
+            organization_id=organization.id)): # type: ignore
         raise HTTPException(
             status_code=403,
             detail=strings.CANNOT_MODIFY_ORGANIZATION

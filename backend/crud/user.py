@@ -9,12 +9,13 @@ from backend.schemas.user import UserCreate, UserUpdate
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
-    def get_by_email(self, db: Session, email: any) -> User | None:
+    def get_by_email(self, db: Session, email: str) -> User | None:
         return db.query(self.model).\
             filter(self.model.email == email).first()
 
     def get_multi_by_email_or_name(
-        self, db: Session, search_query: str,
+        self, db: Session,
+        search_query: str | None,
         skip: int = 0, limit: int = 100,
     ) -> list[User]:
         query = db.query(User)
@@ -44,7 +45,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             filter(UserSubscription.follower_id == user_id).all()
 
     def set_image(self, db: Session, user: User, image_uuid4: str):
-        user.image_uuid4 = image_uuid4
+        user.image_uuid4 = image_uuid4 # type: ignore
         db.add(user)
         db.commit()
         db.refresh(user)

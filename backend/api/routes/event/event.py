@@ -13,6 +13,7 @@ from backend.api.dependencies.user import (
 from backend.api.dependencies.event import (
     get_event_by_id_from_path
 )
+from backend.models.event import Event
 from backend.schemas.user import UserInDBBase
 from backend.schemas.event import (
     EventCreate,
@@ -75,7 +76,7 @@ def create_event(
 )
 def update_event(
     event_in: EventUpdate,
-    event: EventInDBBase = Depends(get_event_by_id_from_path),
+    event: Event = Depends(get_event_by_id_from_path),
     current_user: UserInDBBase = Depends(get_current_user()),
     db=Depends(get_db),
 ):
@@ -132,7 +133,6 @@ def get_event(
     db=Depends(get_db),
 ):
     user_id = current_user.id if current_user else None
-    event = crud.event.get(db, id=event.id)
     result = EventWithAmIParticipationInDBBase.from_orm(event)
     result.am_i_participation = crud.participation.get_by_event_and_user(
         db, event_id=event.id, user_id=user_id
@@ -149,15 +149,15 @@ def get_event(
 def get_events(
     skip: int = 0,
     limit: int = 100,
-    title: str = None,
-    date_begin: datetime = None,
-    date_end: datetime = None,
+    title: str | None = None,
+    date_begin: datetime | None = None,
+    date_end: datetime | None = None,
     tags: list[str] = Query(None, alias="tags[]"),
-    user_id: int = None,
-    organization_id: int = None,
+    user_id: int | None = None,
+    organization_id: int | None = None,
     category_ids: list[int] = Query(None, alias="category_ids[]"),
     place_ids: list[int] = Query(None, alias="place_ids[]"),
-    for_user_id: int = None,
+    for_user_id: int | None = None,
     subscriptions: bool = False,
     personalize_tags: bool = False,
     db=Depends(get_db),

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 
 from backend import crud
 from backend.api.dependencies.database import get_db
@@ -13,7 +13,6 @@ router = APIRouter()
     response_model=list[CategoryInDBBase],
 )
 def get_me(
-    request: Request,
     skip: int = 0,
     limit: int = 100,
     db=Depends(get_db),

@@ -27,7 +27,7 @@ def get_user_azure(
 
 def get_user_azure_without_error(
     user_azure: UserAzureLib = Depends(azure_scheme_without_error)
-) -> UserAzure:
+) -> UserAzure | None:
     if user_azure:
         return UserAzure(
             email=user_azure.claims["preferred_username"],
@@ -45,7 +45,7 @@ def user_exist(
     if not user:
         raise HTTPException(
             status_code=400,
-            detail=strings.USER_DOES_NOT_EXIST_ERROR
+            detail=strings.USER_DOES_NOT_EXIST
         )
     request.state.current_user = user
 
@@ -71,14 +71,14 @@ def _get_current_user(
             return user
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
-        detail=strings.USER_DOES_NOT_EXIST_ERROR
+        detail=strings.USER_DOES_NOT_EXIST
     )
 
 
 def _get_current_user_optional(
     user_azure: UserAzure = Depends(get_user_azure_without_error),
     db: Session = Depends(get_db),
-) -> UserInDBBase:
+) -> UserInDBBase | None:
     if user_azure:
         return crud.user.get_by_email(db, user_azure.email)
     return None
