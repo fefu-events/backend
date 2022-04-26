@@ -39,7 +39,7 @@ def get_organizations(
 
 
 @router.get(
-    "/{organization_id}",
+    "/{organization_id}/",
     name="organization:get_by_id",
     response_model=OrganizationInDBBaseWithMembers,
     tags=["organization"],
@@ -78,7 +78,7 @@ def create_organization(
 
 
 @router.put(
-    "/{organization_id}",
+    "/{organization_id}/",
     name="organization:update",
     response_model=OrganizationInDBBase,
     tags=["organization"],
@@ -103,7 +103,7 @@ def update_organization(
 
 
 @router.delete(
-    "/{organization_id}",
+    "/{organization_id}/",
     name="organization:delete",
     response_model=Message,
     tags=["organization"],

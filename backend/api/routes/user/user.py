@@ -29,7 +29,7 @@ def get_users(
 
 
 @router.get(
-    '/{user_id}',
+    '/{user_id}/',
     name="user:get_by_id",
     response_model=UserWithOrganizationsInDBBase,
 )

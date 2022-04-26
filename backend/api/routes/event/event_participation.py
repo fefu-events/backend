@@ -20,7 +20,7 @@ router = APIRouter()
 
 
 @router.post(
-    '/{event_id}/participant',
+    '/{event_id}/participant/',
     name="event:create_participant",
     response_model=ParticipationInDBBase,
 )
@@ -43,7 +43,7 @@ def create_participant(
 
 
 @router.delete(
-    '/{event_id}/participant',
+    '/{event_id}/participant/',
     name="event:delete_participant",
     response_model=Message,
 )

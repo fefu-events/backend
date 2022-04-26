@@ -19,7 +19,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/{organization_id}/transfer-ownership",
+    "/{organization_id}/transfer-ownership/",
     name="organization:transfer_ownership",
     response_model=Message,
 )

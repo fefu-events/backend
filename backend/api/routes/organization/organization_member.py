@@ -19,7 +19,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/{organization_id}/member",
+    "/{organization_id}/member/",
     name="organization_member:create",
     status_code=201,
     response_model=UserOrganizationInDBBase,
@@ -61,7 +61,7 @@ def create_member_of_organization(
 
 
 @router.delete(
-    "/{organization_id}/member",
+    "/{organization_id}/member/",
     name="organization_member:delete",
     response_model=UserOrganizationInDBBase,
     tags=["organization member"]

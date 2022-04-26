@@ -68,7 +68,7 @@ def create_event(
 
 
 @router.put(
-    "/{event_id}",
+    "/{event_id}/",
     name="event:update",
     response_model=EventInDBBase,
     tags=["event"],
@@ -94,7 +94,7 @@ def update_event(
 
 
 @router.delete(
-    "/{event_id}",
+    "/{event_id}/",
     name="event:delete",
     response_model=Message,
     tags=["event"],
@@ -121,7 +121,7 @@ def delete_event(
 
 
 @router.get(
-    "/{event_id}",
+    "/{event_id}/",
     name="event:get_by_id",
     response_model=EventWithAmIParticipationInDBBase,
     tags=["event"],

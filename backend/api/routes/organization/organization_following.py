@@ -19,7 +19,7 @@ router = APIRouter()
 
 
 @router.post(
-    '/{organization_id}/follow',
+    '/{organization_id}/follow/',
     name="organization:follow_by_id",
     response_model=OrganizationSubscriptionInDBBase,
     tags=["organization following"],
@@ -47,7 +47,7 @@ def follow_organization(
 
 
 @router.delete(
-    '/{organization_id}/unfollow',
+    '/{organization_id}/unfollow/',
     name="organization:unfollow_by_id",
     response_model=Message,
     tags=["organization following"],

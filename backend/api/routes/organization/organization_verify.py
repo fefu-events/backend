@@ -16,7 +16,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/{organization_id}/verification",
+    "/{organization_id}/verification/",
     name="organization:verification",
     response_model=OrganizationInDBBase,
 )
@@ -37,7 +37,7 @@ def verify_organization(
 
 
 @router.delete(
-    "/{organization_id}/verification",
+    "/{organization_id}/verification/",
     name="organization:delete verification",
     response_model=OrganizationInDBBase,
 )

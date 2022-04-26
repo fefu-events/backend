@@ -21,7 +21,7 @@ router = APIRouter(
 
 
 @router.post(
-    '/{user_id}/follow',
+    '/{user_id}/follow/',
     name="user:follow_by_id",
     response_model=UserSubscriptionInDBBase,
     dependencies=[Depends(user_exist)],
@@ -52,7 +52,7 @@ def follow_user(
 
 
 @router.delete(
-    '/{user_id}/unfollow',
+    '/{user_id}/unfollow/',
     name="user:unfollow_by_id",
     response_model=Message,
 )
@@ -75,7 +75,7 @@ def unfollow_user(
 
 
 @router.get(
-    '/{user_id}/followers',
+    '/{user_id}/followers/',
     name="user:get_followers_by_user_id",
     response_model=list[UserInDBBase],
 )
@@ -87,7 +87,7 @@ def get_followers(
 
 
 @router.get(
-    '/{user_id}/following',
+    '/{user_id}/following/',
     name="user:get_followers_by_user_id",
     response_model=list[UserInDBBase],
 )
