@@ -9,7 +9,9 @@ class CRUDCategory(CRUDBase[Category, CategoryCreate, CategoryUpdate]):
 
     def get_by_label(self, db: Session, label: str) -> Category | None:
         return db.query(self.model).\
-            filter(self.model.label == label).first()
+            filter(self.model.label == label).\
+            order_by(self.model.id.desc()).\
+            first()
 
 
 category = CRUDCategory(Category)

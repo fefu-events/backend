@@ -88,7 +88,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             query = query.filter(Event.tags.overlap(user.tags))
 
         return query.\
-            order_by(Event.date_begin.desc(), Event.id.desc()).\
+            order_by(Event.date_begin.asc(), Event.id.desc()).\
             offset(skip).limit(limit).\
             all()
 

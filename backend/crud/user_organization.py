@@ -19,7 +19,9 @@ class CRUDUserOrganization(
                 and_(
                     self.model.user_id == user_id,
                     self.model.organization_id == organization_id
-                )).first()
+                )).\
+            order_by(self.model.id.desc()).\
+            first()
 
     def transfer_owner(
         self, db: Session,

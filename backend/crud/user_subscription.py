@@ -18,6 +18,7 @@ class CRUDEvent(
         return db.query(self.model).\
             filter(and_(self.model.user_id == user_id,
                         self.model.follower_id == follower_id)).\
+            order_by(self.model.id.desc()).\
             first()
 
 
