@@ -26,6 +26,7 @@ class OrganizationInDBBase(OrganizationBase):
     id: int
     is_verified: bool
     owner_id: int | None
+    am_i_following: bool = False
 
     class Config:
         orm_mode = True

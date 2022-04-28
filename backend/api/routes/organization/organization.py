@@ -47,7 +47,14 @@ def get_organizations(
 def get_organization_by_id(
     organization: OrganizationInDBBase =
         Depends(get_organization_by_id_from_path),
+    current_user: UserInDBBase =
+        Depends(get_current_user(required=False)),
+    db=Depends(get_db),
 ):
+    if current_user:
+        organization.am_i_following = crud.organization_subscription.\
+            get_by_users(db, organization_id=organization.id,
+                         follower_id=current_user.id) is not None
     return organization
 
 

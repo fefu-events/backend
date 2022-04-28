@@ -17,7 +17,7 @@ class CRUDOrganizationSubscription(
         pass
 
     def get_by_users(self, db: Session, organization_id: int,
-                     follower_id: int) -> OrganizationSubscription:
+                     follower_id: int | None) -> OrganizationSubscription:
         return db.query(self.model).\
             filter(and_(self.model.organization_id == organization_id,
                         self.model.follower_id == follower_id)).\
