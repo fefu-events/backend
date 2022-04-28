@@ -48,3 +48,4 @@ class UserInDBBase(UserBase):
 
 class UserWithOrganizationsInDBBase(UserInDBBase):
     organizations: list[OrganizationInDBBase]
+    am_i_following: bool = False
