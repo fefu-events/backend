@@ -175,6 +175,6 @@ places = [
         "longitude": 131.884692
     },
 ]
-
-for place in places:
-    crud.place.create(db, obj_in=PlaceCreate(**place))
+if not crud.place.get_multi(db):
+    for place in places:
+        crud.place.create(db, obj_in=PlaceCreate(**place))

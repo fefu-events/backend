@@ -26,5 +26,6 @@ categories = [
     },
 ]
 
-for category in categories:
-    crud.category.create(db, obj_in=CategoryCreate(**category))
+if not crud.category.get_multi(db):
+    for category in categories:
+        crud.category.create(db, obj_in=CategoryCreate(**category))
