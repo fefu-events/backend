@@ -38,6 +38,10 @@ class UserUpdate(BaseModel):
     tags: list[str]
 
 
+class UserUpdateAccess(BaseModel):
+    is_moderator: bool | None
+
+
 class UserInDBBase(UserBase):
     id: int
     image_uuid4: str | None
