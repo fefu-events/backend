@@ -1,6 +1,6 @@
-from enum import Enum
 import logging
 import sys
+from enum import Enum
 
 from loguru import logger
 from pydantic import BaseSettings
@@ -18,7 +18,7 @@ class BaseAppSettings(BaseSettings):
     app_env: AppEnvTypes = AppEnvTypes.test
 
     class Config:
-        env_file = ".env"
+        pass
 
 
 class AppSettings(BaseAppSettings):
@@ -36,6 +36,7 @@ class AppSettings(BaseAppSettings):
     allowed_hosts: list[str] = ["*"]
 
     logging_hosts: int = logging.INFO
+    logging_level: int = logging.DEBUG
     loggers: tuple[str, str] = ("uvicorn.asgi", "uvicorn.access")
 
     openapi_client_id: str
@@ -79,9 +80,13 @@ class AppSettings(BaseAppSettings):
         logging.getLogger().handlers = [InterceptHandler()]
         for logger_name in self.loggers:
             logging_logger = logging.getLogger(logger_name)
-            logging_logger.handlers = [InterceptHandler(level=self.logging_level)]
+            logging_logger.handlers = [
+                InterceptHandler(level=self.logging_level)
+            ]
 
-        logger.configure(handlers=[{"sink": sys.stderr, "level": self.logging_level}])
+        logger.configure(handlers=[
+            {"sink": sys.stderr, "level": self.logging_level}
+        ])
 
 
 class DevAppSettings(AppSettings):
@@ -92,12 +97,12 @@ class DevAppSettings(AppSettings):
     logging_level: int = logging.DEBUG
 
     class Config(AppSettings.Config):
-        env_file = ".env.dev"
+        env_prefix = "dev_"
 
 
 class ProdAppSettings(AppSettings):
     class Config(AppSettings.Config):
-        env_file = ".env.prod"
+        env_prefix = "prod_"
 
 
 class TestAppSettings(AppSettings):
@@ -110,10 +115,10 @@ class TestAppSettings(AppSettings):
     logging_level: int = logging.DEBUG
 
     class Config(AppSettings.Config):
-        env_file = ".env.test"
+        env_prefix = "test_"
 
 
-environments: dict[AppEnvTypes, type[AppSettings]] = {
+environments: dict[AppEnvTypes, type[AppSettings]] = { # noqa
     AppEnvTypes.dev: DevAppSettings,
     AppEnvTypes.prod: ProdAppSettings,
     AppEnvTypes.test: TestAppSettings,

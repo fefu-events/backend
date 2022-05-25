@@ -23,6 +23,7 @@ services:
     command: bash -c "make run"
     volumes:
       - .:/code
+    env_file: ./.env
     ports:
       - "8000:8000"
     depends_on:
@@ -32,6 +33,6 @@ services:
     image: adminer
     restart: always
     ports:
-      - 5050:8080
+      - "5050:8080"
     depends_on:
       - db
