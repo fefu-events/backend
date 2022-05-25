@@ -59,5 +59,13 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.refresh(user)
         return user
 
+    def provide_admin_rights(self, db: Session, user: User) -> User:
+        user.is_moderator = True
+        user.is_admin = True
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
+
 
 user = CRUDUser(User)
