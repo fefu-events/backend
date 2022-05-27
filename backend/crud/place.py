@@ -1,23 +1,23 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session, with_expression
 
 from backend.crud.base import CRUDBase
-from backend.models.place import Place
-from backend.models.event import Event
-from backend.models.user import User
 from backend.models.category import Category
-from backend.models.user_subscription import UserSubscription
-from backend.models.organization_subscription import\
+from backend.models.event import Event
+from backend.models.organization_subscription import \
     OrganizationSubscription
+from backend.models.place import Place
+from backend.models.user import User
+from backend.models.user_subscription import UserSubscription
 from backend.schemas.place import PlaceCreate, PlaceUpdate
 
 
 class CRUDUser(CRUDBase[Place, PlaceCreate, PlaceUpdate]):
 
     def get_by_label(self, db: Session, label: str) -> Place | None:
-        return db.query(self.model).\
+        return db.query(self.model). \
             filter(self.model.label == label).first()
 
     def get_for_map(
@@ -33,6 +33,7 @@ class CRUDUser(CRUDBase[Place, PlaceCreate, PlaceUpdate]):
         user: User | None = None,
         subscriptions: bool = True,
         personalize_tags: bool = True,
+        archived: bool = False,
     ) -> list[Place]:
         query = db.query(
             Place
@@ -57,7 +58,8 @@ class CRUDUser(CRUDBase[Place, PlaceCreate, PlaceUpdate]):
             )
             query = query.filter(or_(
                 Event.user_id == UserSubscription.user_id,
-                Event.organization_id == OrganizationSubscription.organization_id
+                Event.organization_id ==
+                OrganizationSubscription.organization_id
             ))
 
         if title:
@@ -86,10 +88,14 @@ class CRUDUser(CRUDBase[Place, PlaceCreate, PlaceUpdate]):
                 Event.place_id.in_(place_ids))
 
         if tags:
-            query = query.filter(Event.tags.contains(tags)) # type: ignore
+            query = query.filter(Event.tags.contains(tags))  # type: ignore
 
         if user and personalize_tags:
             query = query.filter(Event.tags.overlap(user.tags))
+
+        if not archived:
+            now = datetime.now(tz=timezone.utc)
+            query = query.filter(Event.date_end > now)
 
         query = query.group_by(
             Place.id

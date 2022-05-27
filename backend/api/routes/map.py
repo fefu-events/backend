@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, Query, HTTPException
 
 from backend import crud
 from backend.api.dependencies.database import get_db
+from backend.resources import strings
 from backend.schemas.place import PlaceForMapInDBBase
 from backend.utils import prepare_search_input
-from backend.resources import strings
 
 router = APIRouter()
 
@@ -30,6 +30,7 @@ def get_me(
     for_user_id: int | None = None,
     subscriptions: bool = False,
     personalize_tags: bool = False,
+    archived: bool | None = False,
     db=Depends(get_db),
 ):
     if title:
@@ -49,4 +50,6 @@ def get_me(
         organization_id=organization_id, place_ids=place_ids,
         category_ids=category_ids, user=user, tags=tags,
         subscriptions=subscriptions,
-        personalize_tags=personalize_tags)
+        personalize_tags=personalize_tags,
+        archived=archived
+    )

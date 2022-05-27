@@ -1,4 +1,3 @@
-
 from datetime import datetime
 
 from fastapi import (
@@ -7,27 +6,27 @@ from fastapi import (
 
 from backend import crud
 from backend.api.dependencies.database import get_db
-from backend.api.dependencies.user import (
-    get_current_user
-)
 from backend.api.dependencies.event import (
     get_event_by_id_from_path
 )
+from backend.api.dependencies.user import (
+    get_current_user
+)
 from backend.models.event import Event
-from backend.schemas.user import UserInDBBase
+from backend.resources import strings
 from backend.schemas.event import (
     EventCreate,
     EventInDBBase,
     EventUpdate,
     EventWithAmIParticipationInDBBase,
 )
+from backend.schemas.message import Message
+from backend.schemas.user import UserInDBBase
 from backend.services.event import (
     check_user_can_create_event_by_organization,
     check_user_can_modify_event
 )
-from backend.schemas.message import Message
 from backend.utils import prepare_search_input
-from backend.resources import strings
 
 router = APIRouter()
 
@@ -160,9 +159,10 @@ def get_events(
     for_user_id: int | None = None,
     subscriptions: bool = False,
     personalize_tags: bool = False,
+    archived: bool | None = False,
     db=Depends(get_db),
 ):
-    if title:
+    if title:  # noqa
         title, tags_from_title = prepare_search_input(title)
         tags = tags + tags_from_title if tags else tags_from_title
     user = None
@@ -179,5 +179,6 @@ def get_events(
         organization_id=organization_id, place_ids=place_ids,
         category_ids=category_ids, user=user, tags=tags,
         subscriptions=subscriptions,
-        personalize_tags=personalize_tags)
+        personalize_tags=personalize_tags,
+        archived=archived)
     return events

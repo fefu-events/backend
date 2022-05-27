@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
@@ -6,11 +6,11 @@ from sqlalchemy.orm import Session
 from backend.crud.base import CRUDBase
 from backend.models.category import Category
 from backend.models.event import Event
+from backend.models.organization_subscription import \
+    OrganizationSubscription
 from backend.models.place import Place
 from backend.models.user import User
 from backend.models.user_subscription import UserSubscription
-from backend.models.organization_subscription import\
-    OrganizationSubscription
 from backend.schemas.event import EventCreate, EventUpdate
 
 
@@ -31,17 +31,18 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         date_begin: datetime | None = None,
         date_end: datetime | None = None,
         user_id: int | None = None,
-        organization_id: int | None= None,
+        organization_id: int | None = None,
         category_ids: list[int] | None = None,
-        place_ids: list[int] | None= None,
+        place_ids: list[int] | None = None,
         tags: list[str] | None = None,
         user: User | None = None,
         subscriptions: bool = True,
         personalize_tags: bool = True,
+        archived: bool = False
     ) -> list[Event]:
         query = db.query(self.model).join(Place).join(Category)
 
-        if user and subscriptions:
+        if user and subscriptions:  # noqa
             query = query.join(
                 UserSubscription,
                 user.id == UserSubscription.follower_id,
@@ -53,7 +54,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             )
             query = query.filter(or_(
                 Event.user_id == UserSubscription.user_id,
-                Event.organization_id == OrganizationSubscription.organization_id
+                Event.organization_id ==
+                OrganizationSubscription.organization_id
             ))
 
         if title:
@@ -82,14 +84,18 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 Event.place_id.in_(place_ids))
 
         if tags:
-            query = query.filter(Event.tags.contains(tags)) # type: ignore
+            query = query.filter(Event.tags.contains(tags))  # type: ignore
 
         if user and personalize_tags:
             query = query.filter(Event.tags.overlap(user.tags))
 
-        return query.\
-            order_by(Event.date_begin.asc(), Event.id.desc()).\
-            offset(skip).limit(limit).\
+        if not archived:
+            now = datetime.now(tz=timezone.utc)
+            query = query.filter(Event.date_end > now)
+
+        return query. \
+            order_by(Event.date_begin.asc(), Event.id.desc()). \
+            offset(skip).limit(limit). \
             all()
 
 
