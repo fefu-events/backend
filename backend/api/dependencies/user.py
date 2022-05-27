@@ -1,19 +1,17 @@
 from typing import Callable
 
 from fastapi import Depends, HTTPException, Request, Path, status
-
 from fastapi_azure_auth.user import User as UserAzureLib
-
 from sqlalchemy.orm import Session
 
 from backend import crud
 from backend.api.dependencies.database import get_db
+from backend.resources import strings
 from backend.schemas.azure import (
     azure_scheme,
     azure_scheme_without_error
 )
 from backend.schemas.user import UserAzure, UserInDBBase
-from backend.resources import strings
 
 
 def get_user_azure(
@@ -67,7 +65,7 @@ def _get_current_user(
 ) -> UserInDBBase:
     if user_azure:
         user = crud.user.get_by_email(db, user_azure.email)
-        if user:
+        if user and user.is_active:
             return user
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
