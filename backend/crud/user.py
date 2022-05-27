@@ -17,6 +17,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         self, db: Session,
         search_query: str | None,
         skip: int = 0, limit: int = 100,
+        moderator: bool | None = None,
     ) -> list[User]:
         query = db.query(User)
 
@@ -25,6 +26,9 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
                 func.lower(User.name).contains(func.lower(search_query)),
                 func.lower(User.email).contains(func.lower(search_query))
             ))
+
+        if moderator:
+            query = query.filter(User.is_moderator == True)
 
         return query. \
             order_by(User.id.desc()). \
@@ -51,7 +55,8 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.refresh(user)
         return user
 
-    def update_access(self, db: Session, user: User, access_in: UserUpdateAccess) -> User:
+    def update_access(self, db: Session, user: User,
+                      access_in: UserUpdateAccess) -> User:
         if access_in.is_moderator is not None:
             user.is_moderator = access_in.is_moderator
         db.add(user)

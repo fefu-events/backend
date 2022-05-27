@@ -1,5 +1,7 @@
 # routes messages
 
+DONT_HAVE_ACCESS = "You dont have access"
+
 # USER
 USER_DOES_NOT_EXIST = "The user is not exist"
 EMAIL_TAKEN = "The user with this email already exists"
@@ -29,15 +31,15 @@ CANNOT_MODIFY_ORGANIZATION = "You can not modify this organization"
 ORGANIZATION_HAS_BEEN_DELETED = "The organization has been deleted"
 
 # ORGANIZATION MEMBER
-USER_IS_ALREADY_MEMBER_ORGANIZATION =\
+USER_IS_ALREADY_MEMBER_ORGANIZATION = \
     "The user is already a member of the organization"
-USER_IS_NOT_MEMBER_ORGANIZATION =\
+USER_IS_NOT_MEMBER_ORGANIZATION = \
     "The user is not member of the organization"
-OWNER_CANNOT_REMOVE_HIMSELF =\
+OWNER_CANNOT_REMOVE_HIMSELF = \
     "The owner cannot remove himself from the organization"
 
 # ORGNIZATION TRANSFER OWERSHIP
-YOU_TRANSFERRED_THE_RIGHTS =\
+YOU_TRANSFERRED_THE_RIGHTS = \
     "You transferred the rights"
 
 # ORGANIZATION FOLLOWING
