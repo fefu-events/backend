@@ -12,6 +12,7 @@ class User(Base):
     is_admin = Column(Boolean, default=False, nullable=False)
     is_moderator = Column(Boolean, default=False, nullable=False)
     events = relationship("Event", back_populates="user")
+    is_active = Column(Boolean, default=True, nullable=False)
     followers = relationship(
         "UserSubscription",
         primaryjoin="User.id == UserSubscription.user_id")
