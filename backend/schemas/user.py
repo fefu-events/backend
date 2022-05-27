@@ -44,6 +44,7 @@ class UserUpdateAccess(BaseModel):
 
 class UserInDBBase(UserBase):
     id: int
+    is_active: bool
     image_uuid4: str | None
 
     class Config:
