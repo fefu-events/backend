@@ -1,1 +1,1 @@
-web: alembic upgrade head && uvicorn main:app --reload --workers 4 --host=0.0.0.0 --port=${PORT:-5000}
+web: alembic upgrade head && uvicorn main:app --reload --workers 2 --host=0.0.0.0 --port=${PORT:-5000}
