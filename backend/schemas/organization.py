@@ -2,8 +2,8 @@ from pydantic import BaseModel, constr
 
 
 class OrganizationBase(BaseModel):
-    title: constr(max_length=100)
-    description: constr(max_length=250)
+    title: constr(max_length=50)
+    description: constr(max_length=255)
 
 
 class OrganizationCreate(OrganizationBase):

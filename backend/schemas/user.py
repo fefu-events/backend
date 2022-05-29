@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from pydantic.types import constr
 
 from backend.schemas.organization import OrganizationInDBBase
 
@@ -35,7 +36,7 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    tags: list[str]
+    tags: list[constr(max_length=30)]
 
 
 class UserUpdateAccess(BaseModel):

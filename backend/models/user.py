@@ -8,7 +8,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100))
     email = Column(String(100), unique=True, index=True, nullable=False)
-    tags = Column(ARRAY(String(15)), server_default='{}')
+    tags = Column(ARRAY(String(30)), server_default='{}')
     is_admin = Column(Boolean, default=False, nullable=False)
     is_moderator = Column(Boolean, default=False, nullable=False)
     events = relationship("Event", back_populates="user")

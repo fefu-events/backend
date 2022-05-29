@@ -10,12 +10,12 @@ from backend.schemas.user import UserInDBBase
 
 
 class EventBase(BaseModel):
-    title: constr(max_length=100)
-    description: constr(max_length=1000)
+    title: constr(max_length=50)
+    description: constr(max_length=255)
     date_begin: datetime
     date_end: datetime
-    place_description: constr(max_length=100)
-    tags: list[constr(max_length=15)]
+    place_description: constr(max_length=50)
+    tags: list[constr(max_length=30)]
     url: HttpUrl | None = None
 
 
