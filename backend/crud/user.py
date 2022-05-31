@@ -1,9 +1,12 @@
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, and_
 from sqlalchemy.orm import Session
 
 from backend.crud.base import CRUDBase
+from backend.models.organization import Organization
+from backend.models.organization_subscription import OrganizationSubscription
 from backend.models.user import User
 from backend.models.user_subscription import UserSubscription
+from backend.schemas.subscription import Subscription
 from backend.schemas.user import UserCreate, UserUpdate, UserUpdateAccess
 
 
@@ -42,11 +45,20 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
                  User.id == UserSubscription.follower_id). \
             filter(UserSubscription.user_id == user_id).all()
 
-    def get_following(self, db: Session, user_id) -> list[User]:
-        return db.query(User). \
-            join(UserSubscription,
-                 User.id == UserSubscription.user_id). \
+    def get_following(self, db: Session, user_id) -> list[Subscription]:
+        users = db.query(User).join(
+            UserSubscription, User.id == UserSubscription.user_id). \
             filter(UserSubscription.follower_id == user_id).all()
+        organizations = db.query(Organization). \
+            join(OrganizationSubscription, and_(Organization.id == OrganizationSubscription.organization_id,
+                                                OrganizationSubscription.follower_id == user_id)
+                 ).all()
+        result = []
+        for item in organizations:
+            result.append(Subscription(organization=item, user=None))
+        for item in users:
+            result.append(Subscription(organization=None, user=item))
+        return result
 
     def set_image(self, db: Session, user: User, image_uuid4: str):
         user.image_uuid4 = image_uuid4
@@ -81,3 +93,20 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
 
 user = CRUDUser(User)
+
+"""
+SELECT organization.id AS organization_id,
+        organization.title AS organization_title,
+        organization.description AS organization_description,
+        organization.is_verified AS organization_is_verified 
+FROM organization 
+JOIN organizationsubscription ON "user".id = organizationsubscription.follower_id 
+WHERE organizationsubscription.follower_id = %(follower_id_1)s
+
+SELECT organization.id AS organization_id, organization.title AS organization_title, organization.description AS organization_description, organization.is_verified AS organization_is_verified 
+FROM organization
+JOIN "user"
+    ON "user".id = %(id_1)s
+JOIN organizationsubscription
+    ON organizationsubscription.follower_id = %(follower_id_1)s
+"""

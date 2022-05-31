@@ -7,13 +7,14 @@ from backend.api.dependencies.user import (
     get_current_user,
     get_user_by_id_from_path
 )
+from backend.resources import strings
+from backend.schemas.message import Message
+from backend.schemas.subscription import Subscription
 from backend.schemas.user import UserInDBBase
 from backend.schemas.user_subscription import (
     UserSubscriptionCreate,
     UserSubscriptionInDBBase,
 )
-from backend.schemas.message import Message
-from backend.resources import strings
 
 router = APIRouter(
     tags=["user following"],
@@ -69,7 +70,7 @@ def unfollow_user(
             status_code=status.HTTP_409_CONFLICT,
             detail=strings.USER_IS_NOT_FOLLOWED
         )
-    crud.user_subscription.remove(db, id=user_subscription.id) # type: ignore
+    crud.user_subscription.remove(db, id=user_subscription.id)  # type: ignore
     return Message(detail=strings.USER_IS_NOT_FOLLOWED)
 
 
@@ -88,7 +89,7 @@ def get_followers(
 @router.get(
     '/{user_id}/following/',
     name="user:get_followers_by_user_id",
-    response_model=list[UserInDBBase],
+    response_model=list[Subscription],
 )
 def get_following(
     user_id: int,
