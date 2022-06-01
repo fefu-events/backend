@@ -3,7 +3,7 @@ import sys
 from enum import Enum
 
 from loguru import logger
-from pydantic import BaseSettings
+from pydantic import BaseSettings, validator
 
 from backend.logging import InterceptHandler
 
@@ -12,6 +12,7 @@ class AppEnvTypes(Enum):
     prod: str = "prod"
     dev: str = "dev"
     test: str = "test"
+    heroku: str = "heroku"
 
 
 class BaseAppSettings(BaseSettings):
@@ -105,6 +106,17 @@ class ProdAppSettings(AppSettings):
         env_prefix = "prod_"
 
 
+class HerokuAppSettings(ProdAppSettings):
+
+    @validator('database_url')
+    def change_database_connection(cls, v: str):  # noqa
+        v = f'postgresql+psycopg2://{v.split("://")[1]}'
+        return v
+
+    class Config(AppSettings.Config):
+        env_prefix = ""
+
+
 class TestAppSettings(AppSettings):
     debug: bool = True
 
@@ -118,9 +130,10 @@ class TestAppSettings(AppSettings):
         env_prefix = "test_"
 
 
-environments: dict[AppEnvTypes, type[AppSettings]] = { # noqa
+environments: dict[AppEnvTypes, type[AppSettings]] = {  # noqa
     AppEnvTypes.dev: DevAppSettings,
     AppEnvTypes.prod: ProdAppSettings,
+    AppEnvTypes.heroku: HerokuAppSettings,
     AppEnvTypes.test: TestAppSettings,
 }
 
