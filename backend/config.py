@@ -106,10 +106,10 @@ class ProdAppSettings(AppSettings):
         env_prefix = "prod_"
 
 
-class HerokuAppSettings(ProdAppSettings):
+class HerokuAppSettings(AppSettings):
 
     @validator('database_url')
-    def change_database_connection(cls, v: str):  # noqa
+    def change_database_connection(cls, v: str): # noqa
         v = f'postgresql+psycopg2://{v.split("://")[1]}'
         return v
 
