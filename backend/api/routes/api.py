@@ -48,8 +48,8 @@ router.include_router(
     prefix="/map",
     tags=["map"],
 )
-router.include_router(
-    image.router,
-    prefix="/image",
-    tags=["image"],
-)
+# router.include_router(
+#     image.router,
+#     prefix="/image",
+#     tags=["image"],
+# )
